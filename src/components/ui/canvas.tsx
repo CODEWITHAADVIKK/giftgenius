@@ -172,7 +172,7 @@ export const renderCanvas = function (): (() => void) {
     }
   }
 
-  function onFirstInteraction(e: MouseEvent | TouchEvent) {
+  function onFirstInteraction(e?: MouseEvent | TouchEvent) {
     if (isInitialized) return;
     isInitialized = true;
     document.removeEventListener("mousemove", onFirstInteraction as any);
@@ -180,9 +180,7 @@ export const renderCanvas = function (): (() => void) {
     document.addEventListener("mousemove", handleMove as any);
     document.addEventListener("touchmove", handleMove as any);
     document.addEventListener("touchstart", handleTouchStart);
-    handleMove(e);
-    initLines();
-    render();
+    if (e) handleMove(e);
   }
 
   function handleTouchStart(ev: TouchEvent) {
@@ -219,6 +217,12 @@ export const renderCanvas = function (): (() => void) {
   window.addEventListener("focus", handleFocus);
   window.addEventListener("blur", handleBlur);
   resizeCanvas();
+
+  // Auto-start animation
+  pos.x = window.innerWidth / 2;
+  pos.y = window.innerHeight / 2;
+  initLines();
+  render();
 
   return () => {
     running = false;
