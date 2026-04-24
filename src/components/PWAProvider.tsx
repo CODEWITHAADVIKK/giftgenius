@@ -7,6 +7,7 @@ import { Download, X, Wifi, WifiOff } from "lucide-react";
 export function PWAProvider({ children }: { children: React.ReactNode }) {
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [isOffline, setIsOffline] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
 
   useEffect(() => {
@@ -39,6 +40,7 @@ export function PWAProvider({ children }: { children: React.ReactNode }) {
     window.addEventListener("online", handleOnline);
 
     // Check initial state
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsOffline(!navigator.onLine);
 
     return () => {

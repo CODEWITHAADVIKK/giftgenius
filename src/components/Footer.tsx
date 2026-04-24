@@ -1,6 +1,7 @@
 "use client";
 
 import { Gift } from "lucide-react";
+import Link from "next/link";
 
 const NAV_SECTIONS = [
   {
@@ -49,14 +50,14 @@ export function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-10 mb-14">
           {/* Brand Column */}
           <div className="col-span-2">
-            <a href="/" className="flex items-center gap-2.5 mb-4">
+            <Link href="/" className="flex items-center gap-2.5 mb-4">
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet to-gold flex items-center justify-center">
                 <Gift className="w-4 h-4 text-white" />
               </div>
               <span className="font-[var(--font-heading)] italic text-lg text-white">
                 GiftGenius
               </span>
-            </a>
+            </Link>
             <p className="text-xs text-white/40 font-[var(--font-body)] font-light leading-relaxed max-w-xs mb-6">
               India&apos;s most intelligent gift platform. AI-powered discovery,
               AR preview, voice search in 8 languages, and secure Razorpay checkout.
@@ -84,12 +85,12 @@ export function Footer() {
               <ul className="space-y-2.5">
                 {section.links.map((link) => (
                   <li key={link.label}>
-                    <a
+                    <Link
                       href={link.href}
                       className="text-xs text-white/35 hover:text-white/70 transition-colors font-[var(--font-body)]"
                     >
                       {link.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>

@@ -28,6 +28,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     try {
       const saved = localStorage.getItem("gg-cart");
+      // eslint-disable-next-line
       if (saved) setItems(JSON.parse(saved));
     } catch {}
   }, []);

@@ -47,7 +47,7 @@ interface SpeechGrammarList {
   length: number;
 }
 
-declare var SpeechRecognition: {
+declare let SpeechRecognition: {
   prototype: SpeechRecognition;
   new (): SpeechRecognition;
 };

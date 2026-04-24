@@ -1,35 +1,27 @@
 "use client";
 
-import { Navbar } from "@/components/Navbar";
-import { Hero } from "@/components/Hero";
-import { AIMarquee } from "@/components/AIMarquee";
-import { ProductFeed } from "@/components/ProductFeed";
-import { GiftFinderTeaser } from "@/components/GiftFinderTeaser";
-import { OccasionStrips } from "@/components/OccasionStrips";
-import { WebARFeature } from "@/components/WebARFeature";
-import { HowItWorks } from "@/components/HowItWorks";
-import { StatsSection } from "@/components/StatsSection";
-import { Testimonials } from "@/components/Testimonials";
-import { PaymentTrust } from "@/components/PaymentTrust";
-import { CTASection } from "@/components/CTASection";
-import { Footer } from "@/components/Footer";
+import { Navbar } from "@/components/layout/navbar";
+import { Hero } from "@/components/ui/hero";
+import { GiftFinder } from "@/components/sections/gift-finder";
+import { Collections } from "@/components/sections/collections";
+import { HowItWorks } from "@/components/sections/how-it-works";
+import { OfferBanner } from "@/components/sections/offer-banner";
+import { Testimonials } from "@/components/sections/testimonials";
+import { Pricing } from "@/components/sections/pricing";
+import { Footer } from "@/components/layout/footer";
 import { ChatWidget } from "@/components/ChatWidget";
 
 export default function Home() {
   return (
-    <main className="relative overflow-hidden">
+    <main className="bg-[#0D0F1A] min-h-screen">
       <Navbar />
       <Hero />
-      <AIMarquee />
-      <ProductFeed />
-      <GiftFinderTeaser />
-      <OccasionStrips />
-      <WebARFeature />
+      <GiftFinder />
+      <Collections />
       <HowItWorks />
-      <StatsSection />
+      <OfferBanner />
       <Testimonials />
-      <PaymentTrust />
-      <CTASection />
+      <Pricing />
       <Footer />
       <ChatWidget />
     </main>

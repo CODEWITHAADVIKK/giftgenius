@@ -1,27 +1,12 @@
 import type { Metadata } from "next";
-import { Noto_Serif, DM_Sans, Syne, JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
 
-const notoSerif = Noto_Serif({
+const inter = Inter({
   subsets: ["latin"],
-  weight: ["400", "700"],
-  style: ["normal", "italic"],
-  variable: "--font-noto-serif",
-  display: "swap",
-});
-
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "700"],
-  variable: "--font-dm-sans",
-  display: "swap",
-});
-
-const syne = Syne({
-  subsets: ["latin"],
-  weight: ["700", "800"],
-  variable: "--font-syne",
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-inter",
   display: "swap",
 });
 
@@ -48,9 +33,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${notoSerif.variable} ${dmSans.variable} ${syne.variable} ${jetBrainsMono.variable} dark`}
+      className={`${inter.variable} ${jetBrainsMono.variable} dark`}
     >
-      <body className="min-h-screen bg-void text-text antialiased">
+      <body className="min-h-screen bg-[#0D0F1A] text-[#F9F5FF] antialiased font-[family-name:var(--font-inter)]">
         <Providers>{children}</Providers>
       </body>
     </html>

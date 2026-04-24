@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Script from "next/script";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import {
@@ -32,6 +34,7 @@ export default function CheckoutPage() {
   const [couponApplied, setCouponApplied] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [orderId, setOrderId] = useState("");
 
   const [address, setAddress] = useState({
     name: "",
@@ -56,20 +59,98 @@ export default function CheckoutPage() {
   const handlePayment = async () => {
     setProcessing(true);
 
-    // Simulate Razorpay checkout
-    await new Promise((r) => setTimeout(r, 2000));
+    try {
+      if (paymentMethod === "cod") {
+        const orderRes = await fetch("/api/orders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            items, address, paymentMethod, paymentStatus: "pending",
+            subtotal, tax: gstAmount, shippingFee, total
+          }),
+        });
+        
+        if (orderRes.ok) {
+          setOrderId(`GG-2026-${Math.floor(Math.random() * 9000 + 1000)}`);
+          setOrderPlaced(true);
+          clearCart();
+          addToast("success", "Order Placed! 🎉", "Your COD order is confirmed.");
+        }
+        setProcessing(false);
+        return;
+      }
 
-    // In production, you would:
-    // 1. POST /api/orders to create order on backend
-    // 2. Backend creates Razorpay order via API
-    // 3. Frontend opens Razorpay checkout modal
-    // 4. On success, verify payment signature on backend
-    // 5. Update order status
+      const res = await fetch("/api/razorpay", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: total }),
+      });
+      const data = await res.json();
 
-    setProcessing(false);
-    setOrderPlaced(true);
-    clearCart();
-    addToast("success", "Order Placed! 🎉", `Order ID: GG-2026-${Math.floor(Math.random() * 9000 + 1000)}`);
+      if (!res.ok) throw new Error(data.error);
+
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_placeholder",
+        amount: data.order?.amount || data.amount,
+        currency: data.order?.currency || data.currency,
+        name: "GiftGenius",
+        description: "Gift Purchase",
+        order_id: data.order?.id || data.id,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        handler: async function (response: any) {
+          const verifyRes = await fetch("/api/razorpay/verify", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            }),
+          });
+          const verifyData = await verifyRes.json();
+
+          if (verifyRes.ok && verifyData.verified) {
+            await fetch("/api/orders", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                items, address, paymentMethod, paymentStatus: "paid",
+                razorpayOrderId: response.razorpay_order_id,
+                razorpayPaymentId: response.razorpay_payment_id,
+                subtotal, tax: gstAmount, shippingFee, total
+              }),
+            });
+
+            setOrderId(`GG-2026-${Math.floor(Math.random() * 9000 + 1000)}`);
+            setOrderPlaced(true);
+            clearCart();
+            addToast("success", "Payment Successful! 🎉", "Your order has been placed.");
+          } else {
+            addToast("error", "Payment Failed", "Signature verification failed");
+          }
+        },
+        prefill: {
+          name: address.name,
+          contact: address.phone,
+        },
+        theme: {
+          color: "#8B5CF6",
+        },
+      };
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const rzp = new (window as any).Razorpay(options);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      rzp.on("payment.failed", function (response: any) {
+        addToast("error", "Payment Failed", response.error.description);
+      });
+      rzp.open();
+    } catch (error) {
+      console.error(error);
+      addToast("error", "Payment Error", "Could not initiate payment");
+    } finally {
+      setProcessing(false);
+    }
   };
 
   if (orderPlaced) {
@@ -94,25 +175,25 @@ export default function CheckoutPage() {
             <div className="liquid-glass rounded-xl p-4 mb-6">
               <p className="text-xs text-white/40 font-[var(--font-body)]">Order ID</p>
               <p className="font-[var(--font-mono)] text-lg text-white">
-                GG-2026-{Math.floor(Math.random() * 9000 + 1000)}
+                {orderId}
               </p>
               <p className="text-xs text-teal font-[var(--font-body)] mt-2">
                 📦 Estimated delivery: Apr 25-27
               </p>
             </div>
             <div className="flex gap-3 justify-center">
-              <a
-                href="/orders/GG-2026-7842"
+              <Link
+                href={`/orders/${orderId}`}
                 className="px-6 py-3 rounded-full bg-violet text-white text-sm font-medium hover:bg-violet-light transition-colors"
               >
                 Track Order
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/"
                 className="px-6 py-3 rounded-full bg-white/5 text-white/70 text-sm font-medium hover:bg-white/10 transition-colors"
               >
                 Back to Home
-              </a>
+              </Link>
             </div>
           </motion.div>
         </div>
@@ -122,6 +203,7 @@ export default function CheckoutPage() {
 
   return (
     <>
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
       <Navbar />
       <div className="pt-24 pb-16 px-4 sm:px-6 lg:px-16 max-w-7xl mx-auto">
         {/* Stepper */}
@@ -401,9 +483,9 @@ export default function CheckoutPage() {
               {items.length === 0 && (
                 <p className="text-xs text-white/40 text-center py-4">
                   Cart is empty.{" "}
-                  <a href="/" className="text-violet-light">
+                  <Link href="/" className="text-violet-light">
                     Shop now
-                  </a>
+                  </Link>
                 </p>
               )}
 

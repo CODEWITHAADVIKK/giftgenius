@@ -1,4 +1,4 @@
-import { Product, Order, OrderEvent } from "./types";
+import { Product, Order } from "./types";
 
 // ── Full Product Catalogue ──
 export const products: Product[] = [

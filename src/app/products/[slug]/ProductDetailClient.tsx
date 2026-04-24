@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   Star, Heart, ShoppingBag, Eye, Share2, ChevronRight,
@@ -46,9 +47,9 @@ export function ProductDetailClient({ product }: { product: Product }) {
     <div className="pt-24 pb-16 px-4 sm:px-6 lg:px-16">
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-xs text-white/40 font-[var(--font-body)] mb-8 max-w-7xl mx-auto">
-        <a href="/" className="hover:text-white/60">Home</a>
+        <Link href="/" className="hover:text-white/60">Home</Link>
         <ChevronRight className="w-3 h-3" />
-        <a href="/products" className="hover:text-white/60">Products</a>
+        <Link href="/products" className="hover:text-white/60">Products</Link>
         <ChevronRight className="w-3 h-3" />
         <span className="text-white/60">{product.category}</span>
         <ChevronRight className="w-3 h-3" />
@@ -437,7 +438,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {relatedProducts.map((rp) => (
-              <a
+              <Link
                 key={rp.id}
                 href={`/products/${rp.slug}`}
                 className="bg-surface rounded-xl border border-white/[0.04] p-4 hover:-translate-y-1 hover:border-violet/20 transition-all duration-300 group"
@@ -460,7 +461,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
                 <p className="font-[var(--font-mono)] text-sm text-white mt-1">
                   {formatINR(rp.price)}
                 </p>
-              </a>
+              </Link>
             ))}
           </div>
         </div>

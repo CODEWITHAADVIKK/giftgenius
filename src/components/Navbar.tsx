@@ -12,6 +12,7 @@ import {
   Gift,
   ArrowUpRight,
 } from "lucide-react";
+import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 
 const NAV_LINKS = [
@@ -51,33 +52,33 @@ export function Navbar() {
         }}
       >
         {/* Logo */}
-        <a href="/" className="flex items-center gap-2.5 group">
+        <Link href="/" className="flex items-center gap-2.5 group">
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet to-gold flex items-center justify-center">
             <Gift className="w-4 h-4 text-white" />
           </div>
           <span className="font-[var(--font-heading)] italic text-lg text-white tracking-tight">
             GiftGenius
           </span>
-        </a>
+        </Link>
 
         {/* Center Nav (desktop) */}
         <div className="hidden lg:flex items-center gap-1 liquid-glass rounded-full px-2 py-1">
           {NAV_LINKS.map((link) => (
-            <a
+            <Link
               key={link.label}
               href={link.href}
               className="px-3.5 py-2 text-sm font-[var(--font-body)] text-white/70 hover:text-white transition-colors rounded-full hover:bg-white/5"
             >
               {link.label}
-            </a>
+            </Link>
           ))}
-          <a
+          <Link
             href="/gift-finder"
             className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-violet hover:bg-violet-light rounded-full transition-colors ml-1"
           >
             Find My Gift
             <ArrowUpRight className="w-3.5 h-3.5" />
-          </a>
+          </Link>
         </div>
 
         {/* Right Icons */}
@@ -128,21 +129,21 @@ export function Navbar() {
           </button>
           <div className="flex flex-col gap-4 mt-12">
             {NAV_LINKS.map((link) => (
-              <a
+              <Link
                 key={link.label}
                 href={link.href}
                 className="text-2xl font-[var(--font-heading)] italic text-white/80 hover:text-white transition-colors"
                 onClick={() => setMobileOpen(false)}
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
-            <a
+            <Link
               href="/gift-finder"
               className="mt-6 flex items-center justify-center gap-2 px-6 py-3 bg-violet text-white rounded-full text-lg font-medium"
             >
               Find My Gift <ArrowUpRight className="w-5 h-5" />
-            </a>
+            </Link>
           </div>
         </motion.div>
       )}

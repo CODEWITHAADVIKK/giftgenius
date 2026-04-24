@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 
 export function CTASection() {
   return (
@@ -49,19 +50,19 @@ export function CTASection() {
           transition={{ delay: 0.3 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
-          <a
+          <Link
             href="/gift-finder"
             className="liquid-glass-strong rounded-full px-8 py-4 text-sm font-medium text-white flex items-center gap-2 hover:scale-[1.03] transition-transform"
           >
             Find My Gift
             <ArrowUpRight className="w-4 h-4" />
-          </a>
-          <a
+          </Link>
+          <Link
             href="/products"
             className="bg-white text-void rounded-full px-8 py-4 text-sm font-medium flex items-center gap-2 hover:scale-[1.03] transition-transform hover:bg-white/90"
           >
             View Catalogue
-          </a>
+          </Link>
         </motion.div>
       </div>
     </section>

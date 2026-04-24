@@ -84,8 +84,8 @@ export function Hero() {
           style={{
             top: item.top,
             left: item.left,
-            right: (item as any).right,
-            bottom: (item as any).bottom,
+            right: (item as { right?: string }).right,
+            bottom: (item as { bottom?: string }).bottom,
           }}
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{

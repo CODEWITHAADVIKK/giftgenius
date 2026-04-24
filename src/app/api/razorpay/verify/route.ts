@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-// import crypto from "crypto";
+import crypto from "crypto";
 
 export async function POST(req: Request) {
   try {
@@ -10,21 +10,21 @@ export async function POST(req: Request) {
       razorpay_signature,
     } = body;
 
-    // ── Production Verification ──
-    // const generated_signature = crypto
-    //   .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET!)
-    //   .update(`${razorpay_order_id}|${razorpay_payment_id}`)
-    //   .digest("hex");
-    //
-    // if (generated_signature !== razorpay_signature) {
-    //   return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
-    // }
+    const secret = process.env.RAZORPAY_KEY_SECRET || "rzp_secret_placeholder";
 
-    // ── Demo Mode: Always succeeds ──
+    const generated_signature = crypto
+      .createHmac("sha256", secret)
+      .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+      .digest("hex");
+
+    if (generated_signature !== razorpay_signature) {
+      return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
+    }
+
     return NextResponse.json({
       verified: true,
-      orderId: razorpay_order_id || `order_demo_${Date.now()}`,
-      paymentId: razorpay_payment_id || `pay_demo_${Date.now()}`,
+      orderId: razorpay_order_id,
+      paymentId: razorpay_payment_id,
       message: "Payment verified successfully",
     });
   } catch (error) {

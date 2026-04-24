@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
@@ -35,7 +35,7 @@ const SORT_OPTIONS = [
   { label: "Rating", value: "rating" },
 ];
 
-export default function ProductsPage() {
+function ProductsContent() {
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("q") || "";
   const [query, setQuery] = useState(initialQuery);
@@ -53,6 +53,7 @@ export default function ProductsPage() {
   // Sync URL query param changes
   useEffect(() => {
     const q = searchParams.get("q");
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (q) setQuery(q);
   }, [searchParams]);
 
@@ -279,5 +280,13 @@ export default function ProductsPage() {
       </div>
       <Footer />
     </>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center pt-24"><div className="w-8 h-8 border-4 border-violet/30 border-t-violet rounded-full animate-spin"></div></div>}>
+      <ProductsContent />
+    </Suspense>
   );
 }

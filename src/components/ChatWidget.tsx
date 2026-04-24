@@ -27,6 +27,8 @@ const AI_RESPONSES: Record<string, string> = {
   "diwali gifts": "Diwali is just 28 days away! 🪔 Our top picks: Designer Diya Set (₹999), Premium Dry Fruit Gift Box (₹2,499), and Silver Lakshmi Idol (₹4,999). Want me to find more based on your budget?",
 };
 
+let nextMessageId = 1;
+
 export function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES);
@@ -37,7 +39,7 @@ export function ChatWidget() {
   const sendMessage = async (text: string) => {
     if (!text.trim()) return;
     const userMsg: Message = {
-      id: Date.now().toString(),
+      id: `msg-${nextMessageId++}`,
       role: "user",
       text,
     };
@@ -58,7 +60,7 @@ export function ChatWidget() {
 
     setMessages((prev) => [
       ...prev,
-      { id: (Date.now() + 1).toString(), role: "ai", text: aiText },
+      { id: `msg-${nextMessageId++}`, role: "ai", text: aiText },
     ]);
     setLoading(false);
   };
