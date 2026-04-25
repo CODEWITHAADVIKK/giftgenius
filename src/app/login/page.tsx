@@ -14,7 +14,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { setUser } = useAuth();
+  const { login } = useAuth();
   const { addToast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -22,20 +22,13 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const result = await login(email, password);
 
-      const data = await res.json();
-
-      if (res.ok) {
-        setUser(data.user);
+      if (result.success) {
         addToast("success", "Welcome Back!", "You have successfully logged in.");
         router.push("/");
       } else {
-        addToast("error", "Login Failed", data.message || "Invalid credentials");
+        addToast("error", "Login Failed", result.error || "Invalid credentials");
       }
     } catch (err) {
       addToast("error", "Error", "Something went wrong. Please try again.");

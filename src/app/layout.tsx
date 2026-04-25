@@ -1,42 +1,42 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
-import { Providers } from "@/components/Providers";
+import { CartProvider } from "@/context/CartContext";
+import { AuthProvider } from "@/context/AuthContext";
+import { ToastProvider } from "@/context/ToastContext";
 
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const jetBrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  variable: "--font-jetbrains",
-  display: "swap",
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "GiftGenius AI — India's Smartest Gift Platform",
-  description:
-    "AI-powered gift discovery for modern India. Find the perfect gift in seconds with AR preview, voice search, and GPT-4o recommendations. Trusted by 500K+ happy recipients.",
-  keywords: [
-    "gifts", "AI gifts", "India", "Diwali gifts", "birthday gifts",
-    "gift finder", "AR preview", "GiftGenius",
-  ],
+  title: "GiftGenius AI — Smart Gifting, Reimagined",
+  description: "AI-powered personalized gift recommendations for every occasion.",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html
-      lang="en"
-      className={`${inter.variable} ${jetBrainsMono.variable} dark`}
-    >
-      <body className="min-h-screen bg-[#0D0F1A] text-[#F9F5FF] antialiased font-[family-name:var(--font-inter)]">
-        <Providers>{children}</Providers>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.className} bg-[#0D0F1A] antialiased`}>
+        {/*
+          ✅ suppressHydrationWarning on <html> handles minor attribute
+          differences (e.g. browser extensions adding attributes).
+          
+          ✅ Providers here are server components that render client
+          subtrees — this is correct Next.js pattern.
+          
+          ✅ AuthProvider wraps CartProvider so auth state is available
+          everywhere including cart logic.
+        */}
+        <ToastProvider>
+          <AuthProvider>
+            <CartProvider>
+              {children}
+            </CartProvider>
+          </AuthProvider>
+        </ToastProvider>
       </body>
     </html>
   );

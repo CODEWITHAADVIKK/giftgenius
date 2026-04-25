@@ -15,7 +15,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { setUser } = useAuth();
+  const { register } = useAuth();
   const { addToast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -23,19 +23,13 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
-      });
+      const result = await register(name, email, password);
 
-      const data = await res.json();
-
-      if (res.ok) {
-        addToast("success", "Account Created!", "Please login with your new credentials.");
-        router.push("/login");
+      if (result.success) {
+        addToast("success", "Account Created!", "You have successfully registered.");
+        router.push("/");
       } else {
-        addToast("error", "Registration Failed", data.message || "Failed to create account");
+        addToast("error", "Registration Failed", result.error || "Failed to create account");
       }
     } catch (err) {
       addToast("error", "Error", "Something went wrong. Please try again.");

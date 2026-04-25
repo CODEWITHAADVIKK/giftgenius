@@ -2,186 +2,185 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Gift, Menu, X, User, ShoppingCart } from "lucide-react";
-import GradientMenu from "@/components/ui/gradient-menu";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { useAuth } from "@/context/AuthContext";
+import { Gift, ShoppingCart, Menu, X, User, LogOut } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
 import { CartDrawer } from "@/components/CartDrawer";
+import GradientMenu from "@/components/ui/gradient-menu";
+import { Button } from "@/components/ui/button";
 
 export function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { user, logout } = useAuth();
-  const { count, openCart } = useCart();
-  const router = useRouter();
+  // ✅ CORE FIX: Single mounted guard for the ENTIRE navbar.
+  // Server renders a static skeleton. Client renders full interactive navbar.
+  // This eliminates ALL context/state hydration mismatches in one place.
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handler);
-    return () => window.removeEventListener("scroll", handler);
+    setMounted(true);
   }, []);
+
+  // ✅ Hooks are always called (Rules of Hooks), but values only
+  // used AFTER mounted=true, so server never sees dynamic values.
+  const cart = useCart();
+  const auth = useAuth();
+
+  // ─── SERVER RENDER + PRE-HYDRATION SKELETON ────────────────────────
+  // Identical HTML on server and client until useEffect fires.
+  // React compares these → they match → no hydration error.
+  if (!mounted) {
+    return (
+      <>
+        <nav className="fixed top-0 left-0 right-0 z-50 flex items-center 
+                        justify-between px-6 py-3 backdrop-blur-xl 
+                        bg-[#0D0F1A]/80 border-b border-[#2E2E38] h-[64px]">
+          {/* Logo — static, same on server and client */}
+          <Link href="/" className="flex items-center gap-2 text-white font-bold text-xl">
+            <Gift className="h-6 w-6 text-[#7C3AED]" />
+            <span className="bg-gradient-to-r from-[#7C3AED] to-[#E8A87C] 
+                             bg-clip-text text-transparent">
+              GiftGenius
+            </span>
+          </Link>
+          {/* Empty placeholders — match server output exactly */}
+          <div className="hidden md:flex gap-4" />
+          <div className="flex items-center gap-3">
+            <div className="h-9 w-9 rounded-full bg-[#1F2023] border border-[#2E2E38]" />
+            <div className="h-9 w-20 rounded-full bg-[#1F2023] border border-[#2E2E38]" />
+          </div>
+        </nav>
+        {/* Spacer so content doesn't hide under fixed navbar */}
+        <div className="h-[64px]" />
+      </>
+    );
+  }
+
+  // ─── CLIENT RENDER (after mount) ───────────────────────────────────
+  // All browser APIs, context values, and dynamic state are safe here.
+  const cartCount = cart.count;
+  const isLoggedIn = auth.isLoggedIn;
+  const userName = auth.user?.name;
 
   return (
     <>
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-3 transition-all duration-300 ${
-          scrolled
-            ? "backdrop-blur-xl bg-[#0D0F1A]/90 border-b border-[#2E2E38] shadow-[0_4px_30px_rgba(0,0,0,0.3)]"
-            : "bg-transparent"
-        }`}
-      >
-        <Link
-          href="/"
-          className="flex items-center gap-2 text-white font-bold text-xl"
-        >
+      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center 
+                      justify-between px-6 py-3 backdrop-blur-xl 
+                      bg-[#0D0F1A]/80 border-b border-[#2E2E38]">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2 text-white font-bold text-xl">
           <Gift className="h-6 w-6 text-[#7C3AED]" />
-          <span className="bg-gradient-to-r from-[#7C3AED] to-[#E8A87C] bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-[#7C3AED] to-[#E8A87C] 
+                           bg-clip-text text-transparent">
             GiftGenius
           </span>
         </Link>
 
+        {/* Desktop nav menu */}
         <GradientMenu />
 
-        <div className="hidden md:flex items-center gap-3">
-          {/* Cart Button */}
+        {/* Right side actions */}
+        <div className="flex items-center gap-3">
+          {/* Cart button */}
           <button
-            onClick={openCart}
-            className="relative h-10 w-10 rounded-full bg-[#1F2023] border border-[#2E2E38] 
-                       flex items-center justify-center text-[#9CA3AF] hover:text-white 
-                       hover:border-[#7C3AED]/50 hover:bg-[#7C3AED]/10 transition-all duration-300"
+            onClick={cart.openCart}
+            className="relative h-9 w-9 rounded-full bg-[#1F2023] 
+                       border border-[#2E2E38] flex items-center justify-center 
+                       text-[#9CA3AF] hover:text-white hover:border-[#7C3AED]/50 
+                       hover:bg-[#7C3AED]/10 transition-all duration-300"
+            aria-label="Open cart"
           >
-            <ShoppingCart className="h-5 w-5" />
-            {count > 0 && (
-              <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-[#7C3AED] 
-                               text-white text-xs flex items-center justify-center font-bold">
-                {count > 9 ? "9+" : count}
+            <ShoppingCart className="h-4 w-4" />
+            {cartCount > 0 && (
+              <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full 
+                               bg-[#7C3AED] text-white text-[10px] font-bold 
+                               flex items-center justify-center">
+                {cartCount > 9 ? "9+" : cartCount}
               </span>
             )}
           </button>
 
-          {user ? (
-            <div className="flex items-center gap-4">
-              <span className="text-sm font-medium text-white/80 flex items-center gap-2">
-                <User className="h-4 w-4" />
-                {user.name}
+          {/* Auth buttons */}
+          {isLoggedIn ? (
+            <div className="flex items-center gap-2">
+              <span className="hidden sm:block text-sm text-[#9CA3AF]">
+                Hi, {userName?.split(" ")[0]}
               </span>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={logout}
-                className="text-[#9CA3AF] hover:text-white rounded-full"
+              <button
+                onClick={auth.logout}
+                className="h-9 w-9 rounded-full bg-[#1F2023] border border-[#2E2E38] 
+                           flex items-center justify-center text-[#9CA3AF] 
+                           hover:text-red-400 hover:border-red-500/30 transition-all"
+                aria-label="Logout"
               >
-                Logout
-              </Button>
+                <LogOut className="h-4 w-4" />
+              </button>
             </div>
           ) : (
             <>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => router.push("/login")}
-                className="text-[#9CA3AF] hover:text-white rounded-full"
-              >
-                Sign In
-              </Button>
-              <Button
-                size="sm"
-                onClick={() => router.push("/register")}
-                className="rounded-full bg-gradient-to-r from-[#7C3AED] to-[#9B87F5] text-white px-5 hover:shadow-[0_0_20px_rgba(124,58,237,0.5)] transition-all"
-              >
-                Try for Free
-              </Button>
+              <Link href="/login">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="rounded-full text-[#9CA3AF] hover:text-white 
+                             hover:bg-white/5 transition-all hidden sm:flex"
+                >
+                  <User className="h-4 w-4 mr-1" />
+                  Sign In
+                </Button>
+              </Link>
+              <Link href="/register">
+                <Button
+                  size="sm"
+                  className="rounded-full bg-gradient-to-r from-[#7C3AED] to-[#9B87F5] 
+                             text-white px-5 hover:shadow-[0_0_20px_rgba(124,58,237,0.5)] 
+                             transition-all"
+                >
+                  Try Free
+                </Button>
+              </Link>
             </>
           )}
-        </div>
 
-        {/* Mobile menu button */}
-        <div className="flex items-center gap-2 md:hidden">
-          {/* Mobile cart button */}
+          {/* Mobile menu toggle */}
           <button
-            onClick={openCart}
-            className="relative h-10 w-10 rounded-full bg-[#1F2023] border border-[#2E2E38] 
-                       flex items-center justify-center text-[#9CA3AF] hover:text-white transition-all"
+            onClick={() => setMobileOpen((prev) => !prev)}
+            className="md:hidden h-9 w-9 rounded-full bg-[#1F2023] border border-[#2E2E38] 
+                       flex items-center justify-center text-[#9CA3AF] hover:text-white 
+                       transition-all"
+            aria-label="Toggle menu"
           >
-            <ShoppingCart className="h-5 w-5" />
-            {count > 0 && (
-              <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-[#7C3AED] 
-                               text-white text-xs flex items-center justify-center font-bold">
-                {count > 9 ? "9+" : count}
-              </span>
-            )}
-          </button>
-          <button
-            className="h-10 w-10 rounded-full bg-[#1F2023] border border-[#2E2E38] flex items-center justify-center text-[#9CA3AF] hover:text-white transition-all"
-            onClick={() => setMobileOpen(!mobileOpen)}
-          >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
         </div>
-
-        {/* Mobile dropdown */}
-        {mobileOpen && (
-          <div className="absolute top-full left-0 right-0 bg-[#0D0F1A]/95 backdrop-blur-xl border-b border-[#2E2E38] p-6 flex flex-col gap-4 md:hidden animate-[fadeIn_0.3s_ease]">
-            {["Home", "Shop", "Gifts", "Gift Finder", "About"].map((item) => {
-              let href = "/";
-              if (item === "Shop" || item === "Gifts") href = "/products";
-              else if (item === "Gift Finder") href = "/gift-finder";
-              else if (item === "About") href = "#";
-              return (
-                <Link
-                  key={item}
-                  href={href}
-                  className="text-[#9CA3AF] hover:text-white transition-colors text-lg"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {item}
-                </Link>
-              );
-            })}
-            <div className="flex gap-3 pt-4 border-t border-[#2E2E38]">
-              {user ? (
-                <div className="flex flex-col gap-3 w-full">
-                  <span className="text-sm font-medium text-white/80 flex items-center gap-2">
-                    <User className="h-4 w-4" />
-                    {user.name}
-                  </span>
-                  <Button variant="ghost" size="sm" onClick={() => { logout(); setMobileOpen(false); }} className="w-full text-[#9CA3AF] hover:text-white rounded-full">
-                    Logout
-                  </Button>
-                </div>
-              ) : (
-                <>
-                  <Link
-                    href="/login"
-                    onClick={() => setMobileOpen(false)}
-                    className={cn(
-                      buttonVariants({ variant: "ghost", size: "sm" }),
-                      "w-full text-[#9CA3AF] hover:text-white rounded-full"
-                    )}
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    href="/register"
-                    onClick={() => setMobileOpen(false)}
-                    className={cn(
-                      buttonVariants({ size: "sm" }),
-                      "w-full rounded-full bg-gradient-to-r from-[#7C3AED] to-[#9B87F5] text-white px-5"
-                    )}
-                  >
-                    Try for Free
-                  </Link>
-                </>
-              )}
-            </div>
-          </div>
-        )}
       </nav>
 
-      {/* Cart Drawer rendered globally from navbar */}
+      {/* Mobile dropdown */}
+      {mobileOpen && (
+        <div className="fixed top-[64px] left-0 right-0 z-40 bg-[#0D0F1A] 
+                        border-b border-[#2E2E38] px-6 py-4 flex flex-col gap-3 md:hidden">
+          {[
+            { label: "Home",        href: "/" },
+            { label: "Shop",        href: "/shop" },
+            { label: "Gift Finder", href: "/gift-finder" },
+            { label: "Wishlist",    href: "/wishlist" },
+          ].map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={() => setMobileOpen(false)}
+              className="text-[#9CA3AF] hover:text-white py-2 border-b 
+                         border-[#2E2E38] last:border-0 transition-colors"
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+      )}
+
+      {/* Spacer */}
+      <div className="h-[64px]" />
+
+      {/* Cart drawer — rendered globally here */}
       <CartDrawer />
     </>
   );
