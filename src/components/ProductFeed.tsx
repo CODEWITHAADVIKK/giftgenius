@@ -57,11 +57,11 @@ function ProductCard({
         <button
           onClick={() => {
             addItem({
-              productId: product.id,
+              id: product.id,
+              name: product.name,
+              price: product.price,
               quantity: 1,
-              color: product.colors[0]?.name,
-              size: product.sizes[0],
-              giftWrap: false,
+              image: product.image,
             });
             addToast("cart", "Added to Cart", product.name);
           }}

@@ -1,66 +1,56 @@
-import { NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
+import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/db";
 import User from "@/models/User";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
-    await connectDB();
     const { email, password } = await req.json();
 
     if (!email || !password) {
       return NextResponse.json(
-        { message: "Please provide email and password." },
+        { error: "Please provide email and password." },
         { status: 400 }
       );
     }
 
+    await connectDB();
+
     const user = await User.findOne({ email });
     if (!user || !user.password) {
-      return NextResponse.json(
-        { message: "Invalid credentials." },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return NextResponse.json(
-        { message: "Invalid credentials." },
-        { status: 401 }
-      );
+    const isValid = await bcrypt.compare(password, user.password);
+    if (!isValid) {
+      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
-    const secret = process.env.JWT_SECRET || "fallback_secret_for_dev_only";
     const token = jwt.sign(
-      { userId: user._id, email: user.email, role: user.role },
-      secret,
+      { userId: user._id.toString() },
+      process.env.JWT_SECRET || "fallback_secret_for_dev_only",
       { expiresIn: "7d" }
     );
 
-    const response = NextResponse.json(
-      { message: "Login successful", user: { id: user._id, name: user.name, email: user.email } },
-      { status: 200 }
-    );
+    const response = NextResponse.json({
+      success: true,
+      message: "Login successful",
+      user: { id: user._id, name: user.name, email: user.email },
+    });
 
-    // Set HTTP-only cookie
-    response.cookies.set({
-      name: "token",
-      value: token,
+    // Set HTTP-only cookie correctly for App Router
+    response.cookies.set("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 7 * 24 * 60 * 60, // 7 days
+      maxAge: 60 * 60 * 24 * 7, // 7 days
       path: "/",
     });
 
     return response;
   } catch (error) {
     console.error("Login error:", error);
-    return NextResponse.json(
-      { message: "An error occurred during login." },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Login failed" }, { status: 500 });
   }
 }

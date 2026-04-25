@@ -1,106 +1,104 @@
 "use client";
+import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from "react";
 
-import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
-import { CartItem, Product } from "@/lib/types";
-import { products } from "@/lib/data";
+export interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  image: string;
+  tag?: string;
+}
 
 interface CartContextType {
   items: CartItem[];
   addItem: (item: CartItem) => void;
-  removeItem: (productId: string) => void;
-  updateQuantity: (productId: string, qty: number) => void;
+  removeItem: (id: string) => void;
+  updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
-  isOpen: boolean;
-  setIsOpen: (v: boolean) => void;
   total: number;
-  subtotal: number;
-  itemCount: number;
-  getProduct: (id: string) => Product | undefined;
+  count: number;
+  isOpen: boolean;
+  openCart: () => void;
+  closeCart: () => void;
+  isLoaded: boolean;
 }
+
+const STORAGE_KEY = "giftgenius_cart";
 
 const CartContext = createContext<CartContextType | null>(null);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const skipSave = useRef(true);
 
-  // Load from localStorage
+  // Load from localStorage on mount
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("gg-cart");
-      // eslint-disable-next-line
-      if (saved) setItems(JSON.parse(saved));
+      const raw = window.localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setItems(parsed);
+        }
+      }
     } catch {}
+    // Mark as loaded AND allow saves after this point
+    skipSave.current = false;
+    setIsLoaded(true);
   }, []);
 
-  // Save to localStorage
+  // Persist to localStorage whenever items change (skip initial render)
   useEffect(() => {
-    localStorage.setItem("gg-cart", JSON.stringify(items));
+    if (skipSave.current) return;
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    } catch {}
   }, [items]);
-
-  const getProduct = useCallback(
-    (id: string) => products.find((p) => p.id === id),
-    []
-  );
 
   const addItem = useCallback((item: CartItem) => {
     setItems((prev) => {
-      const existing = prev.find((i) => i.productId === item.productId);
+      const existing = prev.find((i) => i.id === item.id);
       if (existing) {
         return prev.map((i) =>
-          i.productId === item.productId
-            ? { ...i, quantity: i.quantity + item.quantity }
-            : i
+          i.id === item.id ? { ...i, quantity: i.quantity + item.quantity } : i
         );
       }
       return [...prev, item];
     });
-    setIsOpen(true);
   }, []);
 
-  const removeItem = useCallback((productId: string) => {
-    setItems((prev) => prev.filter((i) => i.productId !== productId));
+  const removeItem = useCallback((id: string) => {
+    setItems((prev) => prev.filter((i) => i.id !== id));
   }, []);
 
-  const updateQuantity = useCallback((productId: string, qty: number) => {
-    if (qty <= 0) {
-      setItems((prev) => prev.filter((i) => i.productId !== productId));
+  const updateQuantity = useCallback((id: string, quantity: number) => {
+    if (quantity <= 0) {
+      setItems((prev) => prev.filter((i) => i.id !== id));
     } else {
       setItems((prev) =>
-        prev.map((i) =>
-          i.productId === productId ? { ...i, quantity: qty } : i
-        )
+        prev.map((i) => (i.id === id ? { ...i, quantity } : i))
       );
     }
   }, []);
 
-  const clearCart = useCallback(() => setItems([]), []);
+  const clearCart = useCallback(() => {
+    setItems([]);
+    try { window.localStorage.removeItem(STORAGE_KEY); } catch {}
+  }, []);
 
-  const subtotal = items.reduce((sum, item) => {
-    const prod = getProduct(item.productId);
-    return sum + (prod?.price ?? 0) * item.quantity;
-  }, 0);
-
-  const total = subtotal; // GST + shipping calculated at checkout
-
-  const itemCount = items.reduce((sum, i) => sum + i.quantity, 0);
+  const total = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
+  const count = items.reduce((sum, i) => sum + i.quantity, 0);
 
   return (
-    <CartContext.Provider
-      value={{
-        items,
-        addItem,
-        removeItem,
-        updateQuantity,
-        clearCart,
-        isOpen,
-        setIsOpen,
-        total,
-        subtotal,
-        itemCount,
-        getProduct,
-      }}
-    >
+    <CartContext.Provider value={{
+      items, addItem, removeItem, updateQuantity, clearCart,
+      total, count, isOpen, isLoaded,
+      openCart: () => setIsOpen(true),
+      closeCart: () => setIsOpen(false),
+    }}>
       {children}
     </CartContext.Provider>
   );

@@ -1,7 +1,8 @@
 "use client";
 import { useEffect } from "react";
 import { renderCanvas } from "@/components/ui/canvas";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { Sparkles, ArrowRight, Gift } from "lucide-react";
 import Link from "next/link";
 
@@ -56,24 +57,25 @@ export function Hero() {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 items-center">
-          <Link href="#gift-finder">
-            <Button
-              size="lg"
-              className="rounded-full bg-gradient-to-r from-[#7C3AED] to-[#9B87F5] text-white px-8 py-6 text-base font-semibold shadow-[0_0_30px_rgba(124,58,237,0.5)] hover:shadow-[0_0_40px_rgba(124,58,237,0.7)] hover:scale-105 transition-all duration-300 group"
-            >
-              <Gift className="h-5 w-5 mr-2" />
-              Generate Gift Ideas
-              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-            </Button>
+          <Link
+            href="#gift-finder"
+            className={cn(
+              buttonVariants({ size: "lg" }),
+              "rounded-full bg-gradient-to-r from-[#7C3AED] to-[#9B87F5] text-white px-8 py-6 text-base font-semibold shadow-[0_0_30px_rgba(124,58,237,0.5)] hover:shadow-[0_0_40px_rgba(124,58,237,0.7)] hover:scale-105 transition-all duration-300 group"
+            )}
+          >
+            <Gift className="h-5 w-5 mr-2" />
+            Generate Gift Ideas
+            <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
           </Link>
-          <Link href="#collections">
-            <Button
-              variant="outline"
-              size="lg"
-              className="rounded-full border-[#2E2E38] bg-transparent text-[#F9F5FF] px-8 py-6 text-base hover:bg-white/5 hover:border-[#7C3AED]/50 transition-all duration-300"
-            >
-              Browse Gift Collections
-            </Button>
+          <Link
+            href="#collections"
+            className={cn(
+              buttonVariants({ variant: "outline", size: "lg" }),
+              "rounded-full border-[#2E2E38] bg-transparent text-[#F9F5FF] px-8 py-6 text-base hover:bg-white/5 hover:border-[#7C3AED]/50 transition-all duration-300"
+            )}
+          >
+            Browse Gift Collections
           </Link>
         </div>
 

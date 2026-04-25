@@ -1,7 +1,7 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { Navbar } from "@/components/layout/navbar";
-import { Hero } from "@/components/ui/hero";
 import { GiftFinder } from "@/components/sections/gift-finder";
 import { Collections } from "@/components/sections/collections";
 import { HowItWorks } from "@/components/sections/how-it-works";
@@ -10,6 +10,12 @@ import { Testimonials } from "@/components/sections/testimonials";
 import { Pricing } from "@/components/sections/pricing";
 import { Footer } from "@/components/layout/footer";
 import { ChatWidget } from "@/components/ChatWidget";
+
+// Dynamic import with ssr:false to prevent hydration errors from canvas/window usage
+const Hero = dynamic(
+  () => import("@/components/ui/hero").then((m) => ({ default: m.Hero })),
+  { ssr: false }
+);
 
 export default function Home() {
   return (

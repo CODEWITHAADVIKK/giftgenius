@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { Copy, Check, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export function OfferBanner() {
   const [copied, setCopied] = useState(false);
@@ -70,10 +71,14 @@ export function OfferBanner() {
             GIFTFIRST
             {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
           </button>
-          <Link href="#collections">
-            <Button className="rounded-full bg-white text-[#7C3AED] font-semibold px-6 hover:bg-white/90 hover:scale-105 shadow-lg transition-all group">
-              Shop Now <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-            </Button>
+          <Link
+            href="/products"
+            className={cn(
+              buttonVariants(),
+              "rounded-full bg-white text-[#7C3AED] font-semibold px-6 hover:bg-white/90 hover:scale-105 shadow-lg transition-all group"
+            )}
+          >
+            Shop Now <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
       </div>

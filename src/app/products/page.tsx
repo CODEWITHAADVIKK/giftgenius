@@ -4,8 +4,8 @@ import { useState, useMemo, useEffect, Suspense } from "react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+import { Navbar } from "@/components/layout/navbar";
+import { Footer } from "@/components/layout/footer";
 import {
   Search, SlidersHorizontal, Star, ShoppingBag, Eye, Heart,
   X, ChevronDown, Mic,
@@ -260,11 +260,11 @@ function ProductsContent() {
                   <button
                     onClick={() => {
                       addItem({
-                        productId: product.id,
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
                         quantity: 1,
-                        color: product.colors[0]?.name,
-                        size: product.sizes[0],
-                        giftWrap: false,
+                        image: product.image,
                       });
                       addToast("cart", "Added to Cart", product.name);
                     }}

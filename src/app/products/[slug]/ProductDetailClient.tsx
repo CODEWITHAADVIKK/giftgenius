@@ -29,12 +29,12 @@ export function ProductDetailClient({ product }: { product: Product }) {
 
   const handleAddToCart = () => {
     addItem({
-      productId: product.id,
+      id: product.id,
+      name: product.name,
+      price: product.price,
       quantity: qty,
-      color: selectedColor,
-      size: selectedSize,
-      engraving: engraving || undefined,
-      giftWrap,
+      image: product.image,
+      tag: selectedColor || selectedSize || undefined,
     });
     addToast("cart", "Added to Cart", `${product.name} × ${qty}`);
   };

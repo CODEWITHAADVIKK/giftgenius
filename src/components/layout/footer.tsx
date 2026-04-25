@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Gift, Send } from "lucide-react";
 import { IoLogoWhatsapp, IoLogoFacebook, IoLogoInstagram, IoLogoLinkedin } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/context/ToastContext";
 
 const footerLinks = {
   "Gifts for All": ["Birthday Gifts", "Anniversary Gifts", "Diwali Gifts", "Corporate Gifts", "Wedding Gifts", "Housewarming"],
@@ -20,6 +21,16 @@ const socials = [
 
 export function Footer() {
   const [email, setEmail] = useState("");
+  const { addToast } = useToast();
+
+  const handleSubscribe = () => {
+    if (!email) {
+      addToast("error", "Email Required", "Please enter your email to subscribe.");
+      return;
+    }
+    addToast("success", "Subscribed!", "You've successfully subscribed to our newsletter.");
+    setEmail("");
+  };
 
   return (
     <footer className="relative bg-[#080A12] border-t border-[#1A1A2E] pt-20 pb-8 overflow-hidden">
@@ -52,9 +63,18 @@ export function Footer() {
             <div key={title}>
               <h4 className="text-white font-semibold mb-4">{title}</h4>
               <ul className="space-y-2">
-                {links.map((link) => (
-                  <li key={link}><Link href="#" className="text-[#9CA3AF] text-sm hover:text-white transition-colors">{link}</Link></li>
-                ))}
+                {links.map((link) => {
+                  let href = "#";
+                  if (link === "Gift Finder AI") href = "/gift-finder";
+                  else if (title === "Gifts for All") href = `/products?category=${link.toLowerCase()}`;
+                  return (
+                    <li key={link}>
+                      <Link href={href} className="text-[#9CA3AF] text-sm hover:text-white transition-colors">
+                        {link}
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))}
@@ -69,7 +89,7 @@ export function Footer() {
                 placeholder="you@email.com"
                 className="flex-1 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm px-4 py-2.5 text-sm text-white placeholder-[#9CA3AF]/50 outline-none focus:border-[#7C3AED]/50 transition-all"
               />
-              <Button size="sm" className="rounded-xl bg-gradient-to-r from-[#7C3AED] to-[#9B87F5] text-white px-4">
+              <Button size="sm" onClick={handleSubscribe} className="rounded-xl bg-gradient-to-r from-[#7C3AED] to-[#9B87F5] text-white px-4">
                 <Send className="h-4 w-4" />
               </Button>
             </div>

@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { Heart, ShoppingCart, Star, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 import { products } from "@/lib/data";
 import { useCart } from "@/context/CartContext";
@@ -98,7 +100,7 @@ export function Collections() {
                     className="flex-1 rounded-xl bg-gradient-to-r from-[#7C3AED] to-[#9B87F5] text-white hover:shadow-[0_0_20px_rgba(124,58,237,0.4)] hover:scale-[1.02] transition-all duration-300"
                     size="sm"
                     onClick={() => {
-                      addItem({ productId: product.id, quantity: 1, color: product.colors?.[0]?.name, size: product.sizes?.[0], giftWrap: false });
+                      addItem({ id: product.id, name: product.name, price: product.price, quantity: 1, image: product.image });
                       addToast("success", "Added to Cart", `${product.name} has been added to your cart.`);
                     }}
                   >
@@ -133,14 +135,16 @@ export function Collections() {
           ))}
         </div>
 
-        <div className="text-center mt-12">
-          <Button
-            variant="outline"
-            size="lg"
-            className="rounded-full border-[#2E2E38] text-[#9CA3AF] px-10 hover:border-[#7C3AED]/50 hover:text-white hover:bg-[#7C3AED]/10 transition-all duration-300"
+        <div className="text-center mt-16">
+          <Link
+            href="/products"
+            className={cn(
+              buttonVariants({ variant: "outline", size: "lg" }),
+              "rounded-full border-[#2E2E38] text-[#9CA3AF] px-10 hover:border-[#7C3AED]/50 hover:text-white hover:bg-white/5 transition-all"
+            )}
           >
             View All Collections
-          </Button>
+          </Link>
         </div>
       </div>
     </section>

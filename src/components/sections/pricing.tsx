@@ -1,8 +1,9 @@
 "use client";
 
 import { Gift, Sparkles, Crown, Diamond } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const tiers = [
   { title: "Under ₹599", desc: "Thoughtful everyday gifts — mugs, candles, keychains", icon: <Gift className="h-6 w-6" />, color: "#10B981", items: "50+ options" },
@@ -31,10 +32,14 @@ export function Pricing() {
               <h3 className="text-white font-bold text-xl mb-2">{tier.title}</h3>
               <p className="text-[#9CA3AF] text-sm mb-4 leading-relaxed">{tier.desc}</p>
               <p className="text-xs text-[#9B87F5] mb-6">{tier.items}</p>
-              <Link href="#collections">
-                <Button size="sm" className="w-full rounded-xl bg-gradient-to-r from-[#7C3AED] to-[#9B87F5] text-white hover:shadow-[0_0_20px_rgba(124,58,237,0.4)] transition-all">
-                  Explore
-                </Button>
+              <Link
+                href="/register"
+                className={cn(
+                  buttonVariants({ size: "sm" }),
+                  "w-full rounded-xl bg-gradient-to-r from-[#7C3AED] to-[#9B87F5] text-white hover:shadow-[0_0_20px_rgba(124,58,237,0.4)] transition-all"
+                )}
+              >
+                Get Started Free
               </Link>
             </div>
           ))}

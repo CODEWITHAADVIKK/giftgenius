@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Navbar } from "@/components/Navbar";
+import { Navbar } from "@/components/layout/navbar";
 import {
   ArrowLeft, ArrowRight, Sparkles, Gift, ShoppingBag,
   Heart, Star, Eye,
@@ -255,11 +255,12 @@ export default function GiftFinderPage() {
                       <button
                         onClick={() => {
                           addItem({
-                            productId: prod.id,
+                            id: prod.id,
+                            name: prod.name,
+                            price: prod.price,
                             quantity: 1,
-                            color: prod.colors[0]?.name,
-                            size: prod.sizes[0],
-                            giftWrap: false,
+                            image: prod.image,
+                            tag: "AI Recommended",
                           });
                           addToast("cart", "Added to Cart", prod.name);
                         }}

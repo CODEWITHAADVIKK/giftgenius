@@ -26,7 +26,7 @@ const NAV_LINKS = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { itemCount, setIsOpen } = useCart();
+  const { count, openCart } = useCart();
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 60);
@@ -91,13 +91,13 @@ export function Navbar() {
             <Search className="w-4.5 h-4.5" />
           </button>
           <button
-            onClick={() => setIsOpen(true)}
+            onClick={openCart}
             className="relative p-2 text-white/60 hover:text-white transition-colors"
           >
             <ShoppingBag className="w-4.5 h-4.5" />
-            {itemCount > 0 && (
+            {count > 0 && (
               <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-violet text-[9px] text-white rounded-full flex items-center justify-center font-bold">
-                {itemCount}
+                {count}
               </span>
             )}
           </button>

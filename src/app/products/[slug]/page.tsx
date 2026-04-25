@@ -1,7 +1,7 @@
 import { products } from "@/lib/data";
 import { ProductDetailClient } from "./ProductDetailClient";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+import { Navbar } from "@/components/layout/navbar";
+import { Footer } from "@/components/layout/footer";
 
 export function generateStaticParams() {
   return products.map((p) => ({ slug: p.slug }));

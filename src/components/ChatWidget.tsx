@@ -14,18 +14,11 @@ const INITIAL_MESSAGES: Message[] = [
   {
     id: "0",
     role: "ai",
-    text: "Hi! I'm your GiftGenius AI advisor 🎁 What occasion are you shopping for?",
+    text: "Hi! I'm your GiftGenius AI advisor 🎁 Tell me about who you're gifting and I'll find the perfect match!",
   },
 ];
 
-const QUICK_REPLIES = ["Gift for Mom", "Track order", "Corporate gifts", "Diwali gifts"];
-
-const AI_RESPONSES: Record<string, string> = {
-  "gift for mom": "Great choice! For Mom, I'd recommend our Kashmiri Pashmina Scarf (₹3,799) or the Crystal Aurora Lamp (₹1,899). Both are bestsellers! Would you like to see more options?",
-  "track order": "I'd be happy to help track your order! Please share your order ID (format: GG-2026-XXXX) and I'll fetch the latest status for you.",
-  "corporate gifts": "We offer premium corporate gifting solutions! Our packages start at ₹500/person and include custom branding, bulk discounts, and dedicated account management. Shall I connect you with our corporate team?",
-  "diwali gifts": "Diwali is just 28 days away! 🪔 Our top picks: Designer Diya Set (₹999), Premium Dry Fruit Gift Box (₹2,499), and Silver Lakshmi Idol (₹4,999). Want me to find more based on your budget?",
-};
+const QUICK_REPLIES = ["Gift for Mom", "Gift for him", "Birthday gift", "Corporate gifts", "Budget under ₹1000"];
 
 let nextMessageId = 1;
 
@@ -47,22 +40,41 @@ export function ChatWidget() {
     setInput("");
     setLoading(true);
 
-    // Simulate AI response
-    await new Promise((r) => setTimeout(r, 800 + Math.random() * 700));
+    try {
+      // Build history for context (last 10 messages)
+      const history = messages
+        .filter((m) => m.id !== "0")
+        .slice(-10)
+        .map((m) => ({
+          role: m.role === "ai" ? "assistant" : "user",
+          content: m.text,
+        }));
 
-    const key = Object.keys(AI_RESPONSES).find((k) =>
-      text.toLowerCase().includes(k)
-    );
-    const aiText =
-      key && AI_RESPONSES[key]
-        ? AI_RESPONSES[key]
-        : "That's a great question! Let me search our catalogue for the best options. In the meantime, you can try our Gift Finder for personalized recommendations! 🎁";
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text, history }),
+      });
 
-    setMessages((prev) => [
-      ...prev,
-      { id: `msg-${nextMessageId++}`, role: "ai", text: aiText },
-    ]);
-    setLoading(false);
+      const data = await res.json();
+      const aiText = data.reply || "I'm having trouble right now. Please try again!";
+
+      setMessages((prev) => [
+        ...prev,
+        { id: `msg-${nextMessageId++}`, role: "ai", text: aiText },
+      ]);
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `msg-${nextMessageId++}`,
+          role: "ai",
+          text: "Sorry, I'm having trouble connecting. Please try again! 🎁",
+        },
+      ]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -76,9 +88,9 @@ export function ChatWidget() {
       {/* Floating Trigger */}
       <motion.button
         className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full
-          bg-gradient-to-br from-violet to-violet-light shadow-lg shadow-violet/30
+          bg-gradient-to-br from-[#7C3AED] to-[#9B87F5] shadow-lg shadow-[#7C3AED]/30
           flex items-center justify-center text-2xl
-          hover:shadow-violet/50 transition-shadow"
+          hover:shadow-[#7C3AED]/50 transition-shadow"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setOpen(true)}
@@ -93,7 +105,7 @@ export function ChatWidget() {
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed bottom-6 right-6 z-50 w-[350px] sm:w-[380px] max-h-[550px] flex flex-col rounded-2xl overflow-hidden shadow-2xl shadow-violet/10"
+            className="fixed bottom-6 right-6 z-50 w-[350px] sm:w-[380px] max-h-[550px] flex flex-col rounded-2xl overflow-hidden shadow-2xl shadow-[#7C3AED]/10"
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
@@ -101,22 +113,22 @@ export function ChatWidget() {
             style={{ border: "1px solid rgba(255,255,255,0.08)" }}
           >
             {/* Header */}
-            <div className="liquid-glass-strong p-4 flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-violet to-gold flex items-center justify-center text-base">
+            <div className="bg-[#1F2023] border-b border-[#2E2E38] p-4 flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#7C3AED] to-[#E8A87C] flex items-center justify-center text-base">
                 🎁
               </div>
               <div className="flex-1">
-                <div className="font-[var(--font-display)] text-sm font-bold text-white">
+                <div className="text-sm font-bold text-white">
                   GiftGenius AI
                 </div>
-                <div className="text-[10px] text-teal flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-teal animate-pulse" />
-                  Online · GPT-4o + Rasa NLU
+                <div className="text-[10px] text-[#10B981] flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
+                  Online · AI-Powered
                 </div>
               </div>
               <button
                 onClick={() => setOpen(false)}
-                className="text-white/40 hover:text-white transition-colors"
+                className="text-[#9CA3AF] hover:text-white transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -125,7 +137,7 @@ export function ChatWidget() {
             {/* Messages */}
             <div
               ref={bodyRef}
-              className="flex-1 overflow-y-auto p-4 space-y-3 bg-surface"
+              className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#0D0F1A]"
               style={{ maxHeight: 320 }}
             >
               {messages.map((msg) => (
@@ -136,10 +148,10 @@ export function ChatWidget() {
                   }`}
                 >
                   <div
-                    className={`max-w-[82%] rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed font-[var(--font-body)] ${
+                    className={`max-w-[82%] rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed whitespace-pre-line ${
                       msg.role === "user"
-                        ? "bg-violet text-white rounded-br-sm"
-                        : "bg-card text-white/90 rounded-bl-sm"
+                        ? "bg-[#7C3AED] text-white rounded-br-sm"
+                        : "bg-[#1F2023] text-white/90 rounded-bl-sm border border-[#2E2E38]"
                     }`}
                   >
                     {msg.text}
@@ -153,7 +165,7 @@ export function ChatWidget() {
                   {[0, 1, 2].map((i) => (
                     <motion.span
                       key={i}
-                      className="w-1.5 h-1.5 rounded-full bg-white/30"
+                      className="w-1.5 h-1.5 rounded-full bg-[#9CA3AF]"
                       animate={{ y: [0, -5, 0] }}
                       transition={{
                         repeat: Infinity,
@@ -167,13 +179,14 @@ export function ChatWidget() {
             </div>
 
             {/* Quick Replies */}
-            <div className="px-3 py-2 bg-surface flex gap-2 overflow-x-auto hide-scrollbar border-t border-white/5">
+            <div className="px-3 py-2 bg-[#0D0F1A] flex gap-2 overflow-x-auto border-t border-[#2E2E38]"
+                 style={{ scrollbarWidth: "none" }}>
               {QUICK_REPLIES.map((r) => (
                 <button
                   key={r}
                   onClick={() => sendMessage(r)}
-                  className="text-[10px] px-3 py-1.5 rounded-full border border-white/10 text-white/50
-                    hover:border-violet/40 hover:text-white/80 transition-colors whitespace-nowrap flex-shrink-0 font-[var(--font-body)]"
+                  className="text-[10px] px-3 py-1.5 rounded-full border border-[#2E2E38] text-[#9CA3AF]
+                    hover:border-[#7C3AED]/40 hover:text-white/80 transition-colors whitespace-nowrap flex-shrink-0"
                 >
                   {r}
                 </button>
@@ -181,7 +194,7 @@ export function ChatWidget() {
             </div>
 
             {/* Input */}
-            <div className="p-3 bg-card flex gap-2 items-center">
+            <div className="p-3 bg-[#1F2023] flex gap-2 items-center">
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
@@ -189,21 +202,21 @@ export function ChatWidget() {
                   e.key === "Enter" && !e.shiftKey && sendMessage(input)
                 }
                 placeholder="Ask about gifts, orders..."
-                className="flex-1 bg-surface rounded-full px-4 py-2.5 text-xs text-white
-                  placeholder:text-white/25 outline-none border border-white/[0.06]
-                  focus:border-violet/40 transition-colors font-[var(--font-body)]"
+                className="flex-1 bg-[#0D0F1A] rounded-full px-4 py-2.5 text-xs text-white
+                  placeholder:text-[#9CA3AF]/40 outline-none border border-[#2E2E38]
+                  focus:border-[#7C3AED]/40 transition-colors"
               />
               <button
                 onClick={() => sendMessage(input)}
-                className="w-9 h-9 rounded-full bg-violet hover:bg-violet-light flex items-center justify-center
+                className="w-9 h-9 rounded-full bg-[#7C3AED] hover:bg-[#9B87F5] flex items-center justify-center
                   text-white transition-colors flex-shrink-0"
               >
                 <Send className="w-3.5 h-3.5" />
               </button>
             </div>
 
-            <div className="text-center text-[9px] text-white/15 py-1.5 bg-card font-[var(--font-mono)]">
-              Powered by GPT-4o + Rasa NLU
+            <div className="text-center text-[9px] text-[#9CA3AF]/40 py-1.5 bg-[#1F2023]">
+              Powered by GiftGenius AI
             </div>
           </motion.div>
         )}
@@ -211,3 +224,4 @@ export function ChatWidget() {
     </>
   );
 }
+// v2 - AI-powered chat with /api/chat backend
