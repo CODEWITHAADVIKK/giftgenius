@@ -29,6 +29,7 @@ export default function CheckoutPage() {
   const [processing, setProcessing] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [orderId, setOrderId] = useState("");
+  const [paymentError, setPaymentError] = useState("");
 
   const [address, setAddress] = useState({
     name: "",
@@ -59,9 +60,9 @@ export default function CheckoutPage() {
             subtotal: total, tax: gst, shippingFee, total: grandTotal,
           }),
         });
-        if (orderRes.ok) {
-          const newOrderId = `GG-2026-${Math.floor(Math.random() * 9000 + 1000)}`;
-          setOrderId(newOrderId);
+        const orderData = await orderRes.json();
+        if (orderRes.ok && orderData.order) {
+          setOrderId(orderData.order.orderNumber);
           setOrderPlaced(true);
           clearCart();
         }
@@ -77,19 +78,65 @@ export default function CheckoutPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
 
+      const razorpayOrderId = data.order?.id || data.id;
+
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_placeholder",
         amount: data.order?.amount || data.amount,
         currency: data.order?.currency || data.currency,
         name: "GiftGenius",
         description: "Gift Purchase",
-        order_id: data.order?.id || data.id,
+        order_id: razorpayOrderId,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         handler: async function (response: any) {
-          const newOrderId = `GG-2026-${Math.floor(Math.random() * 9000 + 1000)}`;
-          setOrderId(newOrderId);
-          setOrderPlaced(true);
-          clearCart();
+          try {
+            // Verify payment server-side
+            const verifyRes = await fetch("/api/razorpay/verify", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              }),
+            });
+
+            const verifyData = await verifyRes.json();
+            if (!verifyRes.ok) {
+              throw new Error(verifyData.error || "Payment verification failed");
+            }
+
+            const orderRes = await fetch("/api/orders", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                items,
+                address,
+                paymentMethod,
+                paymentStatus: "paid",
+                razorpayOrderId: response.razorpay_order_id,
+                razorpayPaymentId: response.razorpay_payment_id,
+                subtotal: total,
+                tax: gst,
+                shippingFee,
+                total: grandTotal,
+              }),
+            });
+
+            const orderData = await orderRes.json();
+            if (!orderRes.ok || !orderData.order) {
+              throw new Error(orderData.error || "Order creation failed");
+            }
+
+            setOrderId(orderData.order.orderNumber);
+            setOrderPlaced(true);
+            clearCart();
+          } catch (error) {
+            console.error("Razorpay callback error:", error);
+            setPaymentError(
+              "Payment could not be completed. Please contact support or try again."
+            );
+          }
         },
         prefill: { name: address.name, contact: address.phone },
         theme: { color: "#7C3AED" },
@@ -180,6 +227,11 @@ export default function CheckoutPage() {
       <Navbar />
       <main className="min-h-screen bg-[#0D0F1A] pt-24 pb-16">
         <div className="max-w-5xl mx-auto px-4">
+          {paymentError ? (
+            <div className="mb-6 rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-200">
+              {paymentError}
+            </div>
+          ) : null}
           {/* Stepper */}
           <div className="flex items-center justify-center gap-4 mb-12">
             {STEPS.map((s, i) => (

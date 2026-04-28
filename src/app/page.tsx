@@ -8,6 +8,9 @@ import { HowItWorks } from "@/components/sections/how-it-works";
 import { OfferBanner } from "@/components/sections/offer-banner";
 import { Testimonials } from "@/components/sections/testimonials";
 import { Footer } from "@/components/layout/footer";
+import { ChatWidget } from "@/components/ChatWidget";
+import { WebARFeature } from "@/components/WebARFeature";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 // ✅ Navbar uses useCart, useAuth, useRouter, navigator, window —
 // all browser-only APIs. Must never run on the server.
@@ -23,18 +26,21 @@ const Navbar = dynamic(
   }
 );
 
-// page.tsx itself can be a Server Component (no "use client" needed)
 export default function Home() {
   return (
-    <main className="bg-[#0D0F1A] min-h-screen">
-      <Navbar />
-      <Hero />
-      <GiftFinder />
-      <Collections />
-      <HowItWorks />
-      <OfferBanner />
-      <Testimonials />
-      <Footer />
-    </main>
+    <ErrorBoundary>
+      <main className="bg-[#0D0F1A] min-h-screen">
+        <Navbar />
+        <Hero />
+        <GiftFinder />
+        <Collections />
+        <HowItWorks />
+        <WebARFeature />
+        <OfferBanner />
+        <Testimonials />
+        <Footer />
+        <ChatWidget />
+      </main>
+    </ErrorBoundary>
   );
 }

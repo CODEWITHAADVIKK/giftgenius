@@ -30,7 +30,7 @@ export default function LoginPage() {
       } else {
         addToast("error", "Login Failed", result.error || "Invalid credentials");
       }
-    } catch (err) {
+    } catch {
       addToast("error", "Error", "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
@@ -71,7 +71,15 @@ export default function LoginPage() {
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs text-[#9CA3AF]">Password</label>
+              <div className="flex items-center justify-between">
+                <label className="text-xs text-[#9CA3AF]">Password</label>
+                <Link
+                  href="/forgot-password"
+                  className="text-xs text-[#9B87F5] hover:text-white transition-colors"
+                >
+                  Forgot password?
+                </Link>
+              </div>
               <div className="relative">
                 <Lock className="absolute left-3 top-3 h-5 w-5 text-[#9CA3AF]" />
                 <input

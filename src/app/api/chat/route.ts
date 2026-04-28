@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
+import { chatLimiter } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
+  // Rate limit chat API
+  const limited = chatLimiter(req);
+  if (limited) return limited;
+
   try {
     const { message, history = [] } = await req.json();
 

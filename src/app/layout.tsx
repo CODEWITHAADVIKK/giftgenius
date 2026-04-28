@@ -5,11 +5,50 @@ import { CartProvider } from "@/context/CartContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { ToastProvider } from "@/context/ToastContext";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "GiftGenius AI — Smart Gifting, Reimagined",
-  description: "AI-powered personalized gift recommendations for every occasion.",
+  title: {
+    default: "GiftGenius AI — Smart Gifting, Reimagined",
+    template: "%s | GiftGenius AI",
+  },
+  description:
+    "AI-powered personalized gift recommendations for every occasion. Find the perfect gift for birthdays, anniversaries, Diwali, and more. Premium curated hampers with free shipping.",
+  keywords: [
+    "gifts",
+    "AI gifts",
+    "gift finder",
+    "personalized gifts",
+    "gift hampers",
+    "birthday gifts",
+    "Diwali gifts",
+    "anniversary gifts",
+    "corporate gifts",
+    "India",
+    "GiftGenius",
+  ],
+  authors: [{ name: "GiftGenius AI" }],
+  creator: "GiftGenius AI",
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    url: "https://giftgenius.ai",
+    siteName: "GiftGenius AI",
+    title: "GiftGenius AI — Smart Gifting, Reimagined",
+    description:
+      "AI-powered personalized gift recommendations for every occasion. Curated hampers, premium packaging, doorstep delivery.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "GiftGenius AI — Smart Gifting, Reimagined",
+    description:
+      "AI-powered gift recommendations. Find the perfect gift in seconds.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  metadataBase: new URL("https://giftgenius.ai"),
 };
 
 export default function RootLayout({
@@ -19,17 +58,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} bg-[#0D0F1A] antialiased`}>
-        {/*
-          ✅ suppressHydrationWarning on <html> handles minor attribute
-          differences (e.g. browser extensions adding attributes).
-          
-          ✅ Providers here are server components that render client
-          subtrees — this is correct Next.js pattern.
-          
-          ✅ AuthProvider wraps CartProvider so auth state is available
-          everywhere including cart logic.
-        */}
+      <head>
+        <meta name="theme-color" content="#0D0F1A" />
+        <meta name="color-scheme" content="dark" />
+        <link rel="icon" href="/favicon.ico" />
+      </head>
+      <body className={`${inter.variable} font-sans bg-[#0D0F1A] antialiased`}>
         <ToastProvider>
           <AuthProvider>
             <CartProvider>

@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect, Suspense } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/layout/navbar";
@@ -204,7 +205,7 @@ function ProductsContent() {
                 transition={{ delay: i * 0.05 }}
                 className="group relative bg-surface rounded-2xl overflow-hidden border border-white/[0.06] hover:border-violet/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-violet/10"
               >
-                <a
+                <Link
                   href={`/products/${product.slug}`}
                   className="relative aspect-square bg-card flex items-center justify-center overflow-hidden block"
                 >
@@ -223,17 +224,17 @@ function ProductsContent() {
                       <Eye className="w-3 h-3" /> AR
                     </span>
                   )}
-                </a>
+                </Link>
 
                 <div className="p-4 space-y-2">
                   <span className="text-[10px] text-white/40 font-[var(--font-body)] uppercase tracking-wider">
                     {product.category}
                   </span>
-                  <a href={`/products/${product.slug}`}>
+                  <Link href={`/products/${product.slug}`}>
                     <h3 className="text-sm font-semibold text-white font-[var(--font-display)] leading-tight line-clamp-2 hover:text-violet-light transition-colors">
                       {product.name}
                     </h3>
-                  </a>
+                  </Link>
                   <div className="flex items-center gap-1">
                     {[1, 2, 3, 4, 5].map((s) => (
                       <Star

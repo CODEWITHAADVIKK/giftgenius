@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Navbar } from "@/components/layout/navbar";
+import { Footer } from "@/components/layout/footer";
 import {
   ArrowLeft, ArrowRight, Sparkles, Gift, ShoppingBag,
   Heart, Star, Eye,
@@ -157,6 +159,7 @@ export default function GiftFinderPage() {
             ))}
           </div>
         </div>
+        <Footer />
       </>
     );
   }
@@ -268,12 +271,12 @@ export default function GiftFinderPage() {
                       >
                         <ShoppingBag className="w-3 h-3" /> Add to Cart
                       </button>
-                      <a
+                      <Link
                         href={`/products/${prod.slug}`}
                         className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/5 text-white/60 text-[11px] hover:bg-white/10 transition-colors"
                       >
                         <Eye className="w-3 h-3" /> View
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -299,6 +302,7 @@ export default function GiftFinderPage() {
             </button>
           </motion.div>
         </div>
+        <Footer />
       </>
     );
   }
@@ -437,6 +441,7 @@ export default function GiftFinderPage() {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

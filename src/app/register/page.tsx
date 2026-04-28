@@ -31,7 +31,7 @@ export default function RegisterPage() {
       } else {
         addToast("error", "Registration Failed", result.error || "Failed to create account");
       }
-    } catch (err) {
+    } catch {
       addToast("error", "Error", "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
@@ -100,6 +100,7 @@ export default function RegisterPage() {
                   minLength={6}
                 />
               </div>
+              <p className="text-[10px] text-[#9CA3AF]/60 mt-1">Minimum 6 characters</p>
             </div>
 
             <button

@@ -3,10 +3,18 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/db";
 import User from "@/models/User";
+import { sanitizeEmail } from "@/lib/sanitize";
+import { authLimiter } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, password } = await req.json();
+    // Rate limit
+    const limited = await authLimiter(req);
+    if (limited) return limited;
+
+    const body = await req.json();
+    const email = sanitizeEmail(body.email || "");
+    const password = body.password || "";
 
     if (!email || !password) {
       return NextResponse.json(
