@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const jetbrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains" });
 
 export const metadata: Metadata = {
   title: {
@@ -61,7 +62,7 @@ export default function RootLayout({
         <meta name="color-scheme" content="dark" />
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body className={`${inter.variable} font-sans bg-[#0D0F1A] antialiased`} suppressHydrationWarning>
+      <body className={`${inter.variable} ${jetbrains.variable} font-sans bg-[#0D0F1A] antialiased`} suppressHydrationWarning>
         <Providers>{children}</Providers>
       </body>
     </html>

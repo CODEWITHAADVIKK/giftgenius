@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { PromptInputBox } from "@/components/ui/ai-prompt-box";
-import { Sparkles, Gift, Heart, Star, Loader2 } from "lucide-react";
+import { IoSparklesOutline, IoGiftOutline, IoHeartOutline, IoStar, IoReloadOutline } from "react-icons/io5";
 import { useCart, CartItem } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 
@@ -78,7 +79,7 @@ export function GiftFinder() {
         {/* Section header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 rounded-full border border-[#7C3AED]/30 bg-[#7C3AED]/10 px-4 py-1.5 text-sm text-[#9B87F5] mb-6">
-            <Sparkles className="h-4 w-4" /> AI-Powered Gift Discovery
+            <IoSparklesOutline className="h-5 w-5 text-[#9B87F5]" /> AI-Powered Gift Discovery
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
             Tell us about{" "}
@@ -117,7 +118,7 @@ export function GiftFinder() {
         {/* Loading State */}
         {loading && (
           <div className="flex items-center justify-center gap-2 mt-8 text-[#9B87F5]">
-            <Loader2 className="h-5 w-5 animate-spin" />
+            <IoReloadOutline className="h-5 w-5 animate-spin" />
             <span className="text-sm">Finding perfect gifts...</span>
           </div>
         )}
@@ -135,14 +136,12 @@ export function GiftFinder() {
                   className="rounded-2xl bg-[#1F2023] border border-[#2E2E38] p-4 hover:border-[#7C3AED]/30 transition-all duration-300 group"
                 >
                   <div className="relative aspect-square rounded-xl overflow-hidden mb-3 bg-[#2E2E38]">
-                    <img
+                    <Image
                       src={product.image || "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=400&h=400&fit=crop"}
                       alt={product.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src =
-                          "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=400&h=400&fit=crop";
-                      }}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <span className="absolute top-2 left-2 bg-[#7C3AED]/90 text-white text-[10px] px-2 py-1 rounded-full">
                       AI Pick
@@ -172,9 +171,9 @@ export function GiftFinder() {
         {/* Quick stats row */}
         <div className="mt-8 flex flex-wrap justify-center gap-6 md:gap-8 text-sm text-[#9CA3AF]">
           {[
-            { icon: <Gift className="h-4 w-4" />, text: "500+ Curated Hampers" },
-            { icon: <Heart className="h-4 w-4" />, text: "Hand-assembled with Care" },
-            { icon: <Star className="h-4 w-4" />, text: "Premium Quality Guaranteed" },
+            { icon: <IoGiftOutline className="h-4 w-4 mr-2" />, text: "500+ Curated Hampers" },
+            { icon: <IoHeartOutline className="h-4 w-4" />, text: "Hand-assembled with Care" },
+            { icon: <IoStar className="h-3 w-3 fill-[#F59E0B]" />, text: "Premium Quality Guaranteed" },
           ].map((item, i) => (
             <div key={i} className="flex items-center gap-2 text-[#9B87F5]">
               {item.icon}

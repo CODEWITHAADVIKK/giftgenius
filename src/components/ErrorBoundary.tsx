@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { AlertTriangle, RefreshCcw, Home } from "lucide-react";
+import { IoWarningOutline, IoRefreshOutline, IoHomeOutline } from "react-icons/io5";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -37,7 +37,7 @@ export class ErrorBoundary extends React.Component<
         <div className="min-h-[50vh] flex items-center justify-center p-8">
           <div className="text-center max-w-md">
             <div className="w-16 h-16 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center mx-auto mb-6">
-              <AlertTriangle className="h-8 w-8 text-red-400" />
+              <IoWarningOutline className="h-8 w-8 text-red-400" />
             </div>
             <h2 className="text-xl font-bold text-white mb-2">
               Something Went Wrong
@@ -59,7 +59,7 @@ export class ErrorBoundary extends React.Component<
                 }}
                 className="rounded-full bg-gradient-to-r from-[#7C3AED] to-[#9B87F5] text-white"
               >
-                <RefreshCcw className="h-4 w-4 mr-2" />
+                <IoRefreshOutline className="h-4 w-4 mr-2" />
                 Retry
               </Button>
               <Link href="/">
@@ -67,7 +67,7 @@ export class ErrorBoundary extends React.Component<
                   variant="outline"
                   className="rounded-full border-[#2E2E38] text-[#9CA3AF]"
                 >
-                  <Home className="h-4 w-4 mr-2" />
+                  <IoHomeOutline className="h-4 w-4 mr-2" />
                   Go Home
                 </Button>
               </Link>

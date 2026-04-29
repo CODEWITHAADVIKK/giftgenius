@@ -1,12 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { MessageSquare, Cpu, Truck } from "lucide-react";
+import { IoChatboxOutline, IoHardwareChipOutline, IoCarOutline } from "react-icons/io5";
 
 const steps = [
-  { num: "01", title: "Tell Us About Them", desc: "Describe your recipient — their age, interests, the occasion, and your budget. The more you share, the smarter our suggestions.", icon: <MessageSquare className="h-7 w-7" /> },
-  { num: "02", title: "AI Curates Options", desc: "Our AI analyzes 500+ gifts and matches the best hampers to your description. Personalized, thoughtful, and always on-point.", icon: <Cpu className="h-7 w-7" /> },
-  { num: "03", title: "Gift Gets Delivered", desc: "Choose your hamper, add a personal note, and we'll handle the rest. Premium packaging. Doorstep delivery. Smiles guaranteed.", icon: <Truck className="h-7 w-7" /> },
+  { num: "01", title: "Tell Us About Them", desc: "Describe your recipient — their age, interests, the occasion, and your budget. The more you share, the smarter our suggestions.", icon: <IoChatboxOutline className="h-7 w-7" /> },
+  { num: "02", title: "AI Curates Options", desc: "Our AI analyzes 500+ gifts and matches the best hampers to your description. Personalized, thoughtful, and always on-point.", icon: <IoHardwareChipOutline className="h-7 w-7" /> },
+  { num: "03", title: "Gift Gets Delivered", desc: "Choose your hamper, add a personal note, and we'll handle the rest. Premium packaging. Doorstep delivery. Smiles guaranteed.", icon: <IoCarOutline className="h-7 w-7" /> },
 ];
 
 export function HowItWorks() {

@@ -1,15 +1,16 @@
 "use client";
 
-import { Gift, Sparkles, Crown, Diamond } from "lucide-react";
+import { IoGiftOutline, IoSparklesOutline, IoDiamondOutline } from "react-icons/io5";
+import { FaCrown } from "react-icons/fa";
 import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const tiers = [
-  { title: "Under ₹599", desc: "Thoughtful everyday gifts — mugs, candles, keychains", icon: <Gift className="h-6 w-6" />, color: "#10B981", items: "50+ options" },
-  { title: "Under ₹999", desc: "Curated combos — skincare sets, gourmet snacks, planters", icon: <Sparkles className="h-6 w-6" />, color: "#7C3AED", items: "120+ options" },
-  { title: "Under ₹1399", desc: "Premium hampers — wellness kits, tech accessories, décor", icon: <Crown className="h-6 w-6" />, color: "#E8A87C", items: "80+ options" },
-  { title: "Under ₹1999", desc: "Luxury collections — jewellery, pashmina, crystal lamps", icon: <Diamond className="h-6 w-6" />, color: "#F97316", items: "60+ options" },
+  { title: "Under ₹599", desc: "Thoughtful everyday gifts — mugs, candles, keychains", icon: <IoGiftOutline className="h-6 w-6" />, color: "#10B981", items: "50+ options" },
+  { title: "Under ₹999", desc: "Curated combos — skincare sets, gourmet snacks, planters", icon: <IoSparklesOutline className="h-6 w-6" />, color: "#7C3AED", items: "120+ options" },
+  { title: "Under ₹1399", desc: "Premium hampers — wellness kits, tech accessories, décor", icon: <FaCrown className="h-6 w-6" />, color: "#E8A87C", items: "80+ options" },
+  { title: "Under ₹1999", desc: "Luxury collections — jewellery, pashmina, crystal lamps", icon: <IoDiamondOutline className="h-6 w-6" />, color: "#F97316", items: "60+ options" },
 ];
 
 export function Pricing() {

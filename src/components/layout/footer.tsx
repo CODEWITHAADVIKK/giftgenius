@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Gift, Send, Globe, Camera, Briefcase, MessageCircle } from "lucide-react";
+import { IoGiftOutline, IoSendOutline, IoGlobeOutline, IoCameraOutline, IoBriefcaseOutline, IoChatbubbleEllipsesOutline } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/context/ToastContext";
 
@@ -12,10 +12,10 @@ const footerLinks = {
 };
 
 const socials = [
-  { icon: <Globe className="h-5 w-5" />, label: "Facebook", from: "#1877F2", to: "#4C9EEB" },
-  { icon: <Camera className="h-5 w-5" />, label: "Instagram", from: "#F77737", to: "#E1306C" },
-  { icon: <Briefcase className="h-5 w-5" />, label: "LinkedIn", from: "#0A66C2", to: "#5BB5F0" },
-  { icon: <MessageCircle className="h-5 w-5" />, label: "WhatsApp", from: "#25D366", to: "#128C7E" },
+  { icon: <IoGlobeOutline className="h-5 w-5" />, label: "Facebook", from: "#1877F2", to: "#4C9EEB" },
+  { icon: <IoCameraOutline className="h-5 w-5" />, label: "Instagram", from: "#F77737", to: "#E1306C" },
+  { icon: <IoBriefcaseOutline className="h-5 w-5" />, label: "LinkedIn", from: "#0A66C2", to: "#5BB5F0" },
+  { icon: <IoChatbubbleEllipsesOutline className="h-5 w-5" />, label: "WhatsApp", from: "#25D366", to: "#128C7E" },
 ];
 
 export function Footer() {
@@ -43,7 +43,7 @@ export function Footer() {
           {/* Logo + tagline */}
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center gap-2 text-white font-bold text-xl mb-4">
-              <Gift className="h-6 w-6 text-[#7C3AED]" />
+              <IoGiftOutline className="h-6 w-6 text-[#7C3AED]" />
               <span className="bg-gradient-to-r from-[#7C3AED] to-[#E8A87C] bg-clip-text text-transparent">GiftGenius</span>
             </Link>
             <p className="text-[#9CA3AF] text-sm leading-relaxed mb-6">AI-powered gifting for modern India. Find, personalize, and deliver the perfect gift — every time.</p>
@@ -89,7 +89,7 @@ export function Footer() {
                 className="flex-1 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm px-4 py-2.5 text-sm text-white placeholder-[#9CA3AF]/50 outline-none focus:border-[#7C3AED]/50 transition-all"
               />
               <Button size="sm" onClick={handleSubscribe} className="rounded-xl bg-gradient-to-r from-[#7C3AED] to-[#9B87F5] text-white px-4">
-                <Send className="h-4 w-4" />
+                <IoSendOutline className="h-4 w-4" />
               </Button>
             </div>
           </div>

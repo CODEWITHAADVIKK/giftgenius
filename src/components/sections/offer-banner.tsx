@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Copy, Check, ArrowRight } from "lucide-react";
+import { IoCopyOutline, IoCheckmark, IoArrowForwardOutline } from "react-icons/io5";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -69,7 +69,7 @@ export function OfferBanner() {
             className="flex items-center gap-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 px-5 py-2.5 text-white font-mono font-bold text-lg hover:bg-white/30 transition-all cursor-pointer"
           >
             GIFTFIRST
-            {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+            {copied ? <IoCheckmark className="h-4 w-4" /> : <IoCopyOutline className="h-4 w-4" />}
           </button>
           <Link
             href="/products"
@@ -78,7 +78,7 @@ export function OfferBanner() {
               "rounded-full bg-white text-[#7C3AED] font-semibold px-6 hover:bg-white/90 hover:scale-105 shadow-lg transition-all group"
             )}
           >
-            Shop Now <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            Shop Now <IoArrowForwardOutline className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
       </div>

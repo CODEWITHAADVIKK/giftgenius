@@ -6,6 +6,7 @@ import { Collections } from "@/components/sections/collections";
 import { HowItWorks } from "@/components/sections/how-it-works";
 import { OfferBanner } from "@/components/sections/offer-banner";
 import { Testimonials } from "@/components/sections/testimonials";
+import { Pricing } from "@/components/sections/pricing";
 import { Footer } from "@/components/layout/footer";
 import { ChatWidget } from "@/components/ChatWidget";
 import { WebARFeature } from "@/components/WebARFeature";
@@ -22,6 +23,7 @@ export default function Home() {
         <Collections />
         <HowItWorks />
         <WebARFeature />
+        <Pricing />
         <OfferBanner />
         <Testimonials />
         <Footer />
@@ -30,3 +32,4 @@ export default function Home() {
     </ErrorBoundary>
   );
 }
+

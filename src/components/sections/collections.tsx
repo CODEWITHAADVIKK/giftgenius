@@ -1,6 +1,6 @@
 "use client";
 
-import { Heart, ShoppingCart, Star, Sparkles } from "lucide-react";
+import { IoHeartOutline, IoHeart, IoCartOutline, IoStar, IoSparklesOutline } from "react-icons/io5";
 import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -20,7 +20,7 @@ export function Collections() {
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 rounded-full border border-[#E8A87C]/30 bg-[#E8A87C]/10 px-4 py-1.5 text-sm text-[#E8A87C] mb-6">
-            <Sparkles className="h-4 w-4" /> Curated Gift Hampers
+            <IoSparklesOutline className="h-4 w-4" /> Curated Gift Hampers
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
             Best Gift Hampers at{" "}
@@ -51,7 +51,7 @@ export function Collections() {
 
                 {/* AI Match Score */}
                 <div className="absolute top-3 right-3 z-10 flex items-center gap-1 rounded-full bg-black/60 backdrop-blur-sm px-2 py-1 text-xs text-[#9B87F5]">
-                  <Sparkles className="h-3 w-3" />
+                  <IoSparklesOutline className="h-3 w-3" />
                   98% match
                 </div>
 
@@ -73,7 +73,7 @@ export function Collections() {
                     </span>
                     <div className="flex items-center gap-0.5">
                       {[...Array(5)].map((_, i) => (
-                        <Star
+                        <IoStar
                           key={i}
                           className="h-3 w-3 fill-[#E8A87C] text-[#E8A87C]"
                         />
@@ -106,7 +106,7 @@ export function Collections() {
                         addToast("success", "Added to Cart", `${product.name} has been added to your cart.`);
                       }}
                     >
-                      <ShoppingCart className="h-4 w-4 mr-1" />
+                      <IoCartOutline className="h-4 w-4 mr-1" />
                       Add to Cart
                     </Button>
                     <Button
@@ -131,11 +131,11 @@ export function Collections() {
                         );
                       }}
                     >
-                      <Heart
-                        className={`h-4 w-4 ${
-                          wishlisted ? "fill-red-500" : ""
-                        }`}
-                      />
+                      {wishlisted ? (
+                        <IoHeart className="h-4 w-4 text-red-500" />
+                      ) : (
+                        <IoHeartOutline className="h-4 w-4" />
+                      )}
                     </Button>
                   </div>
                 </div>

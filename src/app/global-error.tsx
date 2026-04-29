@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { AlertTriangle, RefreshCcw, Home } from "lucide-react";
+import { IoWarningOutline, IoRefreshOutline, IoHomeOutline } from "react-icons/io5";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -28,7 +28,7 @@ export default function GlobalError({
             className="text-center max-w-md"
           >
             <div className="w-20 h-20 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center mx-auto mb-6">
-              <AlertTriangle className="h-10 w-10 text-red-400" />
+              <IoWarningOutline className="h-10 w-10 text-red-400" />
             </div>
             <h1 className="text-2xl font-bold text-white mb-3">
               Something Went Wrong
@@ -41,7 +41,7 @@ export default function GlobalError({
                 onClick={reset}
                 className="rounded-full bg-gradient-to-r from-[#7C3AED] to-[#9B87F5] text-white"
               >
-                <RefreshCcw className="h-4 w-4 mr-2" />
+                <IoRefreshOutline className="h-4 w-4 mr-2" />
                 Try Again
               </Button>
               <Link href="/">
@@ -49,7 +49,7 @@ export default function GlobalError({
                   variant="outline"
                   className="rounded-full border-[#2E2E38] text-[#9CA3AF]"
                 >
-                  <Home className="h-4 w-4 mr-2" />
+                  <IoHomeOutline className="h-4 w-4 mr-2" />
                   Go Home
                 </Button>
               </Link>

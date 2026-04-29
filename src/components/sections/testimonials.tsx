@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Star, Quote } from "lucide-react";
+import { IoStar } from "react-icons/io5";
+import { FaQuoteLeft } from "react-icons/fa";
 
 const testimonials = [
   {
@@ -68,8 +69,8 @@ export function Testimonials() {
             <div key={idx} ref={(el) => { refs.current[idx] = el; }}
               className={`rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm p-6 transition-all duration-700 ${visible[idx] ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
               style={{ transitionDelay: `${idx * 150}ms` }}>
-              <Quote className="h-8 w-8 text-[#7C3AED]/30 mb-4" />
-              <div className="flex gap-1 mb-4">{[...Array(t.rating)].map((_, i) => <Star key={i} className="h-4 w-4 fill-[#E8A87C] text-[#E8A87C]" />)}</div>
+              <FaQuoteLeft className="h-8 w-8 text-[#7C3AED]/30 mb-4" />
+              <div className="flex gap-1 mb-4">{[...Array(t.rating)].map((_, i) => <IoStar key={i} className="h-4 w-4 fill-[#E8A87C] text-[#E8A87C]" />)}</div>
               <p className="text-[#9CA3AF] text-sm leading-relaxed mb-6">&ldquo;{t.quote}&rdquo;</p>
               <div className="mb-4 inline-block rounded-full bg-[#7C3AED]/10 border border-[#7C3AED]/20 px-3 py-1 text-xs text-[#9B87F5]">{t.product}</div>
               <div className="flex items-center gap-3 pt-4 border-t border-white/10">

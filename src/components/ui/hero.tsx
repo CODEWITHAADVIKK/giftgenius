@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { renderCanvas } from "@/components/ui/canvas";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Sparkles, ArrowRight, Gift } from "lucide-react";
+import { IoSparklesOutline, IoArrowForwardOutline, IoGiftOutline } from "react-icons/io5";
 import Link from "next/link";
 
 export function Hero() {
@@ -34,7 +34,7 @@ export function Hero() {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#7C3AED] opacity-75" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-[#7C3AED]" />
           </span>
-          <Sparkles className="h-4 w-4" />
+          <IoSparklesOutline className="h-4 w-4" />
           Introducing GiftGenius AI — Smart Gifting, Reimagined
         </div>
 
@@ -64,9 +64,9 @@ export function Hero() {
               "rounded-full bg-gradient-to-r from-[#7C3AED] to-[#9B87F5] text-white px-8 py-6 text-base font-semibold shadow-[0_0_30px_rgba(124,58,237,0.5)] hover:shadow-[0_0_40px_rgba(124,58,237,0.7)] hover:scale-105 transition-all duration-300 group"
             )}
           >
-            <Gift className="h-5 w-5 mr-2" />
+            <IoGiftOutline className="h-5 w-5 mr-2" />
             Generate Gift Ideas
-            <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            <IoArrowForwardOutline className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
           </Link>
           <Link
             href="#collections"

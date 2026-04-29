@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Home, Search, ArrowLeft, Gift } from "lucide-react";
+import { IoHomeOutline, IoSearchOutline, IoArrowBackOutline, IoGiftOutline } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
 
 export default function NotFoundPage() {
@@ -36,7 +36,7 @@ export default function NotFoundPage() {
           transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
           className="w-16 h-16 rounded-2xl bg-[#7C3AED]/20 border border-[#7C3AED]/30 flex items-center justify-center mx-auto mb-6"
         >
-          <Gift className="h-8 w-8 text-[#9B87F5]" />
+          <IoGiftOutline className="h-8 w-8 text-[#9B87F5]" />
         </motion.div>
 
         <h1 className="text-2xl md:text-3xl font-bold text-white mb-3">
@@ -50,7 +50,7 @@ export default function NotFoundPage() {
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link href="/">
             <Button className="rounded-full bg-gradient-to-r from-[#7C3AED] to-[#9B87F5] text-white px-6 group">
-              <Home className="h-4 w-4 mr-2" />
+              <IoHomeOutline className="h-4 w-4 mr-2" />
               Go Home
             </Button>
           </Link>
@@ -59,7 +59,7 @@ export default function NotFoundPage() {
               variant="outline"
               className="rounded-full border-[#2E2E38] text-[#9CA3AF] px-6 hover:border-[#7C3AED]/50 hover:text-white"
             >
-              <Search className="h-4 w-4 mr-2" />
+              <IoSearchOutline className="h-4 w-4 mr-2" />
               Browse Gifts
             </Button>
           </Link>
