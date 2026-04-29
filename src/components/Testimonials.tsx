@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CheckCircle2, Quote } from "lucide-react";
+import { IoCheckmarkCircleOutline, IoChatboxOutline } from "react-icons/io5";
 
 const REVIEWS = [
   {
@@ -57,7 +57,7 @@ export function Testimonials() {
               className="liquid-glass rounded-2xl p-7 flex flex-col justify-between group hover:-translate-y-1 transition-transform duration-300"
             >
               <div>
-                <Quote className="w-8 h-8 text-violet/30 mb-4" />
+                <IoChatboxOutline className="w-8 h-8 text-violet/30 mb-4" />
                 <p className="text-sm text-white/80 font-[var(--font-heading)] italic leading-relaxed mb-6">
                   &ldquo;{review.quote}&rdquo;
                 </p>
@@ -76,7 +76,7 @@ export function Testimonials() {
                   </p>
                 </div>
                 {review.verified && (
-                  <CheckCircle2 className="w-4 h-4 text-teal flex-shrink-0" />
+                  <IoCheckmarkCircleOutline className="w-4 h-4 text-teal flex-shrink-0" />
                 )}
               </div>
             </motion.div>

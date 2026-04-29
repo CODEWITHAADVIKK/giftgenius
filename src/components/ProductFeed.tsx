@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ShoppingBag, Heart, Eye, Star } from "lucide-react";
+import { IoCartOutline, IoHeartOutline, IoEyeOutline, IoStar } from "react-icons/io5";
 import { formatINR } from "@/lib/utils";
 import { products as CATALOG } from "@/lib/data";
 import { useCart } from "@/context/CartContext";
@@ -47,7 +47,7 @@ function ProductCard({
         {/* AR Badge */}
         {product.ar && (
           <span className="absolute top-3 left-3 liquid-glass rounded-full px-2.5 py-1 text-[10px] text-teal font-medium flex items-center gap-1 z-10">
-            <Eye className="w-3 h-3" /> AR
+            <IoEyeOutline className="w-3 h-3" /> AR
           </span>
         )}
       </a>
@@ -67,10 +67,10 @@ function ProductCard({
           }}
           className="flex-1 liquid-glass-strong rounded-full py-2 text-[11px] font-medium text-white flex items-center justify-center gap-1.5 hover:bg-white/10 transition-colors"
         >
-          <ShoppingBag className="w-3 h-3" /> Add to Cart
+          <IoCartOutline className="w-3 h-3" /> Add to Cart
         </button>
         <button className="liquid-glass rounded-full p-2 hover:bg-white/10 transition-colors">
-          <Heart className="w-3.5 h-3.5 text-white/60" />
+          <IoHeartOutline className="w-3.5 h-3.5 text-white/60" />
         </button>
       </div>
 
@@ -88,7 +88,7 @@ function ProductCard({
         {/* Rating */}
         <div className="flex items-center gap-1.5">
           {[1, 2, 3, 4, 5].map((star) => (
-            <Star
+            <IoStar
               key={star}
               className={`w-3 h-3 ${
                 star <= Math.floor(product.rating)

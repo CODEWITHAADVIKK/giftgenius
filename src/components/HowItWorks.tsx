@@ -1,28 +1,28 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { MessageSquare, Brain, Truck } from "lucide-react";
+import { IoEllipseOutline, IoCarOutline } from "react-icons/io5";
 
 const STEPS = [
   {
     num: "01",
     title: "Tell Us About Them",
     desc: "Voice or text — describe who you're gifting and the occasion. Our NLU understands 8 Indian languages.",
-    icon: MessageSquare,
+    icon: IoEllipseOutline,
     color: "text-violet-light",
   },
   {
     num: "02",
     title: "AI Finds the Perfect Match",
     desc: "NCF engine scores 500K+ products against your preferences. GPT-4o refines the shortlist in real-time.",
-    icon: Brain,
+    icon: IoEllipseOutline,
     color: "text-gold",
   },
   {
     num: "03",
     title: "Gift Arrives with Love",
     desc: "Premium packaging, gift wrapping, and personal message. Track every step with real-time updates.",
-    icon: Truck,
+    icon: IoCarOutline,
     color: "text-teal",
   },
 ];

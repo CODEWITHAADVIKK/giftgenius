@@ -7,10 +7,7 @@ import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
-import {
-  Search, SlidersHorizontal, Star, ShoppingBag, Eye, Heart,
-  X, ChevronDown, Mic,
-} from "lucide-react";
+import { IoSearchOutline, IoEllipseOutline, IoStar, IoCartOutline, IoEyeOutline, IoHeartOutline, IoCloseOutline, IoChevronDownOutline } from "react-icons/io5";
 import { products } from "@/lib/data";
 import { formatINR } from "@/lib/utils";
 import { useCart } from "@/context/CartContext";
@@ -110,7 +107,7 @@ function ProductsContent() {
         <div className="flex flex-col md:flex-row gap-4 mb-8">
           {/* Search */}
           <div className="flex-1 relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
+            <IoSearchOutline className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -123,7 +120,7 @@ function ProductsContent() {
                   onClick={() => setQuery("")}
                   className="text-white/30 hover:text-white/60 p-1"
                 >
-                  <X className="w-4 h-4" />
+                  <IoCloseOutline className="w-4 h-4" />
                 </button>
               )}
               {isSupported && (
@@ -136,7 +133,7 @@ function ProductsContent() {
                   }`}
                   title="Voice search"
                 >
-                  <Mic className="w-4 h-4" />
+                  <IoEllipseOutline className="w-4 h-4" />
                 </button>
               )}
             </div>
@@ -155,7 +152,7 @@ function ProductsContent() {
                 </option>
               ))}
             </select>
-            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30 pointer-events-none" />
+            <IoChevronDownOutline className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30 pointer-events-none" />
           </div>
 
           {/* AR Toggle */}
@@ -167,7 +164,7 @@ function ProductsContent() {
                 : "bg-white/[0.03] border border-white/[0.06] text-white/60 hover:border-white/10"
             }`}
           >
-            <Eye className="w-4 h-4" />
+            <IoEyeOutline className="w-4 h-4" />
             AR Only
           </button>
         </div>
@@ -222,7 +219,7 @@ function ProductsContent() {
                   </span>
                   {product.ar && (
                     <span className="absolute top-3 left-3 liquid-glass rounded-full px-2.5 py-1 text-[10px] text-teal font-medium flex items-center gap-1 z-10">
-                      <Eye className="w-3 h-3" /> AR
+                      <IoEyeOutline className="w-3 h-3" /> AR
                     </span>
                   )}
                 </Link>
@@ -238,7 +235,7 @@ function ProductsContent() {
                   </Link>
                   <div className="flex items-center gap-1">
                     {[1, 2, 3, 4, 5].map((s) => (
-                      <Star
+                      <IoStar
                         key={s}
                         className={`w-3 h-3 ${
                           s <= Math.floor(product.rating)
@@ -273,7 +270,7 @@ function ProductsContent() {
                       }}
                       className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-violet/15 text-violet-light text-[11px] font-medium hover:bg-violet/25 transition-colors"
                     >
-                      <ShoppingBag className="w-3 h-3" /> Add to Cart
+                      <IoCartOutline className="w-3 h-3" /> Add to Cart
                     </button>
                     <WishlistButton product={product} />
                   </div>
@@ -314,7 +311,7 @@ function WishlistButton({ product }: { product: typeof products[number] }) {
           : "bg-white/5 text-white/40 border border-white/10 hover:text-red-400 hover:border-red-500/30"
       }`}
     >
-      <Heart className={`w-3.5 h-3.5 ${wishlisted ? "fill-red-500" : ""}`} />
+      <IoHeartOutline className={`w-3.5 h-3.5 ${wishlisted ? "fill-red-500" : ""}`} />
     </button>
   );
 }

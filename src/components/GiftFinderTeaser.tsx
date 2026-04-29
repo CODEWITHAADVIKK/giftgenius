@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { IoArrowForwardOutline, IoSparklesOutline } from "react-icons/io5";
 import { useState, useEffect } from "react";
 
 const RECIPIENTS = ["your Mom", "your Boss", "your Partner", "your Sister", "your Friend"];
@@ -36,7 +36,7 @@ export function GiftFinderTeaser() {
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 liquid-glass rounded-full px-3.5 py-1.5 text-xs text-white/60 font-[var(--font-body)] mb-6"
           >
-            <Sparkles className="w-3.5 h-3.5 text-gold" />
+            <IoSparklesOutline className="w-3.5 h-3.5 text-gold" />
             AI Gift Wizard
           </motion.div>
 
@@ -92,7 +92,7 @@ export function GiftFinderTeaser() {
             className="inline-flex items-center gap-2 liquid-glass-strong rounded-full px-7 py-3.5 text-sm font-medium text-white hover:scale-[1.03] transition-transform"
           >
             Start Gift Finder
-            <ArrowRight className="w-4 h-4" />
+            <IoArrowForwardOutline className="w-4 h-4" />
           </motion.a>
         </div>
 

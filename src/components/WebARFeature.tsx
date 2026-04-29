@@ -1,15 +1,16 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Smartphone, Camera, Zap, Share2, X, RotateCcw } from "lucide-react";
+import { IoArrowForwardOutline, IoPhonePortraitOutline, IoCameraOutline, IoFlashOutline, IoShareSocialOutline, IoCloseOutline, IoRefreshOutline } from "react-icons/io5";
 import { products } from "@/lib/data";
 
 const FEATURES = [
-  { icon: Zap, label: "50+ AR Products" },
-  { icon: Smartphone, label: "No App Needed" },
-  { icon: Camera, label: "Works on Any Phone" },
-  { icon: Share2, label: "Snap & Share" },
+  { icon: IoFlashOutline, label: "50+ AR Products" },
+  { icon: IoPhonePortraitOutline, label: "No App Needed" },
+  { icon: IoCameraOutline, label: "Works on Any Phone" },
+  { icon: IoShareSocialOutline, label: "Snap & Share" },
 ];
 
 const arProducts = products.filter((p) => p.ar);
@@ -110,7 +111,7 @@ export function WebARFeature() {
             className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#7C3AED] to-[#9B87F5] px-7 py-3.5 text-sm font-medium text-white hover:scale-[1.03] hover:shadow-[0_0_20px_rgba(124,58,237,0.4)] transition-all"
           >
             Browse AR-Ready Gifts
-            <ArrowRight className="w-4 h-4" />
+            <IoArrowForwardOutline className="w-4 h-4" />
           </motion.a>
         </div>
 
@@ -147,7 +148,7 @@ export function WebARFeature() {
                         onClick={() => { setActiveAR(null); setScale(1); }}
                         className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center"
                       >
-                        <X className="w-3 h-3 text-white/60" />
+                        <IoCloseOutline className="w-3 h-3 text-white/60" />
                       </button>
                     </div>
 
@@ -163,12 +164,14 @@ export function WebARFeature() {
                           transform: `rotateY(${rotation}deg) scale(${scale})`,
                           transition: "transform 0.1s linear",
                         }}
-                        className="w-32 h-32 rounded-2xl overflow-hidden shadow-lg shadow-[#7C3AED]/20"
+                        className="relative w-32 h-32 rounded-2xl overflow-hidden shadow-lg shadow-[#7C3AED]/20"
                       >
-                        <img
+                        <Image
                           src={activeProduct.image}
                           alt={activeProduct.name}
-                          className="w-full h-full object-cover"
+                          fill
+                          sizes="128px"
+                          className="object-cover"
                         />
                       </div>
                     </div>
@@ -198,7 +201,7 @@ export function WebARFeature() {
                           onClick={() => { setRotation(0); setScale(1); }}
                           className="px-3 py-1.5 rounded-full bg-white/5 text-white/60 text-[10px] border border-white/10"
                         >
-                          <RotateCcw className="w-3 h-3" />
+                          <IoRefreshOutline className="w-3 h-3" />
                         </button>
                       </div>
                     </div>
@@ -223,11 +226,13 @@ export function WebARFeature() {
                           onClick={() => setActiveAR(p.id)}
                           className="w-full flex items-center gap-3 p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-[#7C3AED]/30 hover:bg-[#7C3AED]/5 transition-all text-left"
                         >
-                          <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-[#1F2023]">
-                            <img
+                          <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-[#1F2023] relative">
+                            <Image
                               src={p.image}
                               alt={p.name}
-                              className="w-full h-full object-cover"
+                              fill
+                              sizes="48px"
+                              className="object-cover"
                             />
                           </div>
                           <div className="flex-1 min-w-0">
@@ -238,7 +243,7 @@ export function WebARFeature() {
                               ₹{p.price.toLocaleString()} · AR Ready
                             </p>
                           </div>
-                          <Camera className="w-4 h-4 text-white/20 flex-shrink-0" />
+                          <IoCameraOutline className="w-4 h-4 text-white/20 flex-shrink-0" />
                         </button>
                       ))}
                     </div>

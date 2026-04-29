@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import { IoArrowRedoOutline } from "react-icons/io5";
 import Link from "next/link";
 
 export function CTASection() {
@@ -55,7 +55,7 @@ export function CTASection() {
             className="liquid-glass-strong rounded-full px-8 py-4 text-sm font-medium text-white flex items-center gap-2 hover:scale-[1.03] transition-transform"
           >
             Find My Gift
-            <ArrowUpRight className="w-4 h-4" />
+            <IoArrowRedoOutline className="w-4 h-4" />
           </Link>
           <Link
             href="/products"

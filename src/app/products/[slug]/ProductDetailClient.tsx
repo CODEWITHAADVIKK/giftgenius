@@ -4,10 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import {
-  Star, Heart, ShoppingBag, Eye, Share2, ChevronRight,
-  Truck, Shield, RotateCcw, Package, Check, Minus, Plus,
-} from "lucide-react";
+import { IoStar, IoHeartOutline, IoCartOutline, IoEyeOutline, IoShareSocialOutline, IoChevronForwardOutline, IoCarOutline, IoShieldCheckmarkOutline, IoRefreshOutline, IoCubeOutline, IoCheckmark, IoRemoveOutline, IoAddOutline } from "react-icons/io5";
 import { Product } from "@/lib/types";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
@@ -50,11 +47,11 @@ export function ProductDetailClient({ product }: { product: Product }) {
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-xs text-white/40 font-[var(--font-body)] mb-8 max-w-7xl mx-auto">
         <Link href="/" className="hover:text-white/60">Home</Link>
-        <ChevronRight className="w-3 h-3" />
+        <IoChevronForwardOutline className="w-3 h-3" />
         <Link href="/products" className="hover:text-white/60">Products</Link>
-        <ChevronRight className="w-3 h-3" />
+        <IoChevronForwardOutline className="w-3 h-3" />
         <span className="text-white/60">{product.category}</span>
-        <ChevronRight className="w-3 h-3" />
+        <IoChevronForwardOutline className="w-3 h-3" />
         <span className="text-white/70">{product.name}</span>
       </nav>
 
@@ -102,11 +99,11 @@ export function ProductDetailClient({ product }: { product: Product }) {
                     onClick={() => setShowAR(true)}
                     className="absolute top-4 left-4 liquid-glass rounded-full px-3 py-1.5 text-xs text-teal flex items-center gap-1.5 hover:bg-white/5 transition-colors z-10"
                   >
-                    <Eye className="w-3.5 h-3.5" /> View in AR
+                    <IoEyeOutline className="w-3.5 h-3.5" /> View in AR
                   </button>
                 )}
                 <button className="absolute top-4 right-4 liquid-glass rounded-full p-2.5 text-white/40 hover:text-white transition-colors z-10">
-                  <Share2 className="w-4 h-4" />
+                  <IoShareSocialOutline className="w-4 h-4" />
                 </button>
                 <span className="absolute bottom-4 left-4 bg-coral/90 text-white text-xs font-bold px-3 py-1 rounded-full z-10">
                   {product.discount}% OFF
@@ -157,7 +154,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1">
               {[1, 2, 3, 4, 5].map((s) => (
-                <Star
+                <IoStar
                   key={s}
                   className={`w-4 h-4 ${
                     s <= Math.floor(product.rating)
@@ -194,7 +191,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
 
           {/* Delivery */}
           <div className="liquid-glass rounded-xl px-4 py-3 flex items-center gap-3">
-            <Package className="w-4 h-4 text-teal flex-shrink-0" />
+            <IoCubeOutline className="w-4 h-4 text-teal flex-shrink-0" />
             <div className="flex-1">
               <span className="text-xs text-white/70 font-[var(--font-body)]">
                 Deliver to{" "}
@@ -263,7 +260,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
                 onClick={() => setQty(Math.max(1, qty - 1))}
                 className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center text-white/60 hover:bg-white/5 transition-colors"
               >
-                <Minus className="w-4 h-4" />
+                <IoRemoveOutline className="w-4 h-4" />
               </button>
               <span className="font-[var(--font-mono)] text-lg text-white w-8 text-center">
                 {qty}
@@ -272,7 +269,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
                 onClick={() => setQty(Math.min(product.stock, qty + 1))}
                 className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center text-white/60 hover:bg-white/5 transition-colors"
               >
-                <Plus className="w-4 h-4" />
+                <IoAddOutline className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -310,7 +307,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
                   : "bg-white/5 border border-white/10"
               }`}
             >
-              {giftWrap && <Check className="w-3 h-3 text-white" />}
+              {giftWrap && <IoCheckmark className="w-3 h-3 text-white" />}
             </div>
             <span className="text-sm text-white/70 font-[var(--font-body)]">
               🎁 Add Gift Wrap (+₹99)
@@ -323,7 +320,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
               onClick={handleAddToCart}
               className="flex items-center justify-center gap-2 w-full py-4 rounded-full bg-gradient-to-r from-violet to-violet-light text-white text-sm font-semibold hover:shadow-lg hover:shadow-violet/20 transition-all hover:scale-[1.01] active:scale-[0.99]"
             >
-              <ShoppingBag className="w-4 h-4" />
+              <IoCartOutline className="w-4 h-4" />
               Add to Cart — {formatINR(product.price * qty)}
             </button>
             <button
@@ -346,7 +343,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
                   : "bg-white/[0.02] border-white/[0.08] text-white/70 hover:border-white/15"
               }`}
             >
-              <Heart
+              <IoHeartOutline
                 className={`w-4 h-4 ${wishlisted ? "fill-coral" : ""}`}
               />
               {wishlisted ? "Saved to Wishlist" : "Save to Wishlist"}
@@ -361,9 +358,9 @@ export function ProductDetailClient({ product }: { product: Product }) {
           {/* Trust Badges */}
           <div className="flex flex-wrap gap-4 pt-2">
             {[
-              { icon: RotateCcw, label: "7-day return" },
-              { icon: Shield, label: "Secure payment" },
-              { icon: Truck, label: "98% on-time" },
+              { icon: IoRefreshOutline, label: "7-day return" },
+              { icon: IoShieldCheckmarkOutline, label: "Secure payment" },
+              { icon: IoCarOutline, label: "98% on-time" },
             ].map((b) => (
               <span
                 key={b.label}
