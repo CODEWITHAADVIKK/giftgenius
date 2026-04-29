@@ -1,6 +1,6 @@
 "use client";
 
-import { Gift } from "lucide-react";
+import { IoGiftOutline } from "react-icons/io5";
 import Link from "next/link";
 
 const NAV_SECTIONS = [
@@ -52,7 +52,7 @@ export function Footer() {
           <div className="col-span-2">
             <Link href="/" className="flex items-center gap-2.5 mb-4">
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet to-gold flex items-center justify-center">
-                <Gift className="w-4 h-4 text-white" />
+                <IoGiftOutline className="w-4 h-4 text-white" />
               </div>
               <span className="font-[var(--font-heading)] italic text-lg text-white">
                 GiftGenius

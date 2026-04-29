@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Download, X, Wifi, WifiOff } from "lucide-react";
+import { IoDownloadOutline, IoCloseOutline, IoWifiOutline, IoWarningOutline } from "react-icons/io5";
 
 export function PWAProvider({ children }: { children: React.ReactNode }) {
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
@@ -80,11 +80,11 @@ export function PWAProvider({ children }: { children: React.ReactNode }) {
               onClick={() => setShowInstallPrompt(false)}
               className="absolute top-3 right-3 text-white/30 hover:text-white/60"
             >
-              <X className="w-4 h-4" />
+              <IoCloseOutline className="w-4 h-4" />
             </button>
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet to-gold flex items-center justify-center flex-shrink-0">
-                <Download className="w-5 h-5 text-white" />
+                <IoDownloadOutline className="w-5 h-5 text-white" />
               </div>
               <div className="flex-1 space-y-2">
                 <h3 className="text-sm font-semibold text-white font-[var(--font-display)]">
@@ -123,7 +123,7 @@ export function PWAProvider({ children }: { children: React.ReactNode }) {
             exit={{ opacity: 0, y: -50 }}
             className="fixed top-0 left-0 right-0 z-[500] bg-coral/90 backdrop-blur-sm px-4 py-2 flex items-center justify-center gap-2"
           >
-            <WifiOff className="w-3.5 h-3.5 text-white" />
+            <IoWarningOutline className="w-3.5 h-3.5 text-white" />
             <span className="text-xs text-white font-[var(--font-body)]">
               You&apos;re offline — some features may be limited
             </span>
