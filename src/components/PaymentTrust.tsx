@@ -1,17 +1,17 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Lock, Shield, FileText, RotateCcw } from "lucide-react";
+import { IoLockClosedOutline, IoShieldCheckmarkOutline, IoDocumentTextOutline, IoRefreshOutline } from "react-icons/io5";
 
 const PAYMENT_METHODS = [
   "UPI", "GPay", "PhonePe", "Paytm", "Visa", "Mastercard", "RuPay", "COD",
 ];
 
 const TRUST_BADGES = [
-  { icon: Lock, label: "Razorpay Secured" },
-  { icon: Shield, label: "PCI-DSS Compliant" },
-  { icon: FileText, label: "GST Invoice" },
-  { icon: RotateCcw, label: "7-Day Return" },
+  { icon: IoLockClosedOutline, label: "Razorpay Secured" },
+  { icon: IoShieldCheckmarkOutline, label: "PCI-DSS Compliant" },
+  { icon: IoDocumentTextOutline, label: "GST Invoice" },
+  { icon: IoRefreshOutline, label: "7-Day Return" },
 ];
 
 export function PaymentTrust() {

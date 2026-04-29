@@ -4,20 +4,17 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
-import {
-  Package, Check, Truck, MapPin, Clock, Phone,
-  CircleDot, Search,
-} from "lucide-react";
+import { IoCubeOutline, IoCheckmark, IoCarOutline, IoEllipseOutline, IoTimeOutline, IoSearchOutline } from "react-icons/io5";
 import { demoOrders } from "@/lib/data";
 import { formatINR } from "@/lib/utils";
 
-const STATUS_ICONS: Record<string, typeof Package> = {
-  pending: Clock,
-  confirmed: Check,
-  processing: Package,
-  shipped: Truck,
-  out_for_delivery: MapPin,
-  delivered: Check,
+const STATUS_ICONS: Record<string, any> = {
+  pending: IoTimeOutline,
+  confirmed: IoCheckmark,
+  processing: IoCubeOutline,
+  shipped: IoCarOutline,
+  out_for_delivery: IoEllipseOutline,
+  delivered: IoCheckmark,
 };
 
 export default function OrderTrackingPage() {
@@ -55,7 +52,7 @@ export default function OrderTrackingPage() {
           </p>
           <div className="flex gap-2 max-w-md mx-auto">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
+              <IoSearchOutline className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
               <input
                 value={orderId}
                 onChange={(e) => setOrderId(e.target.value)}
@@ -104,7 +101,7 @@ export default function OrderTrackingPage() {
             <div className="liquid-glass rounded-2xl p-6">
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-10 h-10 rounded-full bg-violet/20 flex items-center justify-center">
-                  <Truck className="w-5 h-5 text-violet-light" />
+                  <IoCarOutline className="w-5 h-5 text-violet-light" />
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-white font-[var(--font-display)]">
@@ -142,7 +139,7 @@ export default function OrderTrackingPage() {
               </h3>
               <div className="space-y-0">
                 {order.timeline.map((event, i) => {
-                  const Icon = STATUS_ICONS[event.status] || CircleDot;
+                  const Icon = STATUS_ICONS[event.status] || IoEllipseOutline;
                   const isActive = i <= currentStepIdx;
                   const isCurrent = i === currentStepIdx;
 
@@ -273,7 +270,7 @@ export default function OrderTrackingPage() {
                 {order.address.city}, {order.address.state} — {order.address.pincode}
               </p>
               <p className="text-xs text-white/50 font-[var(--font-body)] flex items-center gap-1 mt-2">
-                <Phone className="w-3 h-3" /> {order.address.phone}
+                <IoEllipseOutline className="w-3 h-3" /> {order.address.phone}
               </p>
             </div>
 

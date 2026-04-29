@@ -6,21 +6,18 @@ import Script from "next/script";
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
-import {
-  Check, CreditCard, Building2, Smartphone, Wallet, Banknote,
-  Lock, Package, ChevronRight, MapPin, ArrowLeft,
-} from "lucide-react";
+import { IoCheckmark, IoCardOutline, IoEllipseOutline, IoPhonePortraitOutline, IoLockClosedOutline, IoCubeOutline, IoChevronForwardOutline, IoArrowBackOutline } from "react-icons/io5";
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 
 const STEPS = ["Delivery", "Payment", "Review"];
 
 const PAYMENT_METHODS = [
-  { id: "upi", label: "UPI", sub: "GPay · PhonePe · Paytm", icon: Smartphone, recommended: true },
-  { id: "card", label: "Credit / Debit Card", sub: "Visa · MC · RuPay", icon: CreditCard, recommended: false },
-  { id: "netbanking", label: "Net Banking", sub: "SBI · HDFC · ICICI · Axis", icon: Building2, recommended: false },
-  { id: "emi", label: "EMI", sub: "Starting ₹416/month", icon: Wallet, recommended: false },
-  { id: "cod", label: "Cash on Delivery", sub: "₹49 COD fee applies", icon: Banknote, recommended: false },
+  { id: "upi", label: "UPI", sub: "GPay · PhonePe · Paytm", icon: IoPhonePortraitOutline, recommended: true },
+  { id: "card", label: "Credit / Debit Card", sub: "Visa · MC · RuPay", icon: IoCardOutline, recommended: false },
+  { id: "netbanking", label: "Net Banking", sub: "SBI · HDFC · ICICI · Axis", icon: IoEllipseOutline, recommended: false },
+  { id: "emi", label: "EMI", sub: "Starting ₹416/month", icon: IoEllipseOutline, recommended: false },
+  { id: "cod", label: "Cash on Delivery", sub: "₹49 COD fee applies", icon: IoEllipseOutline, recommended: false },
 ];
 
 export default function CheckoutPage() {
@@ -166,7 +163,7 @@ export default function CheckoutPage() {
             className="text-center max-w-md"
           >
             <div className="w-20 h-20 rounded-full bg-[#10B981]/20 flex items-center justify-center mx-auto mb-6">
-              <Check className="w-10 h-10 text-[#10B981]" />
+              <IoCheckmark className="w-10 h-10 text-[#10B981]" />
             </div>
             <h1 className="text-3xl font-bold text-white mb-3">
               Order Confirmed! 🎉
@@ -243,7 +240,7 @@ export default function CheckoutPage() {
                       : "bg-[#1F2023] text-[#9CA3AF]"
                   }`}
                 >
-                  {i < step ? <Check className="w-4 h-4" /> : i + 1}
+                  {i < step ? <IoCheckmark className="w-4 h-4" /> : i + 1}
                 </div>
                 <span className={`text-sm ${i <= step ? "text-white" : "text-[#9CA3AF]"}`}>
                   {s}
@@ -263,7 +260,7 @@ export default function CheckoutPage() {
                   className="space-y-6"
                 >
                   <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                    <MapPin className="w-5 h-5 text-[#7C3AED]" /> Delivery Address
+                    <IoEllipseOutline className="w-5 h-5 text-[#7C3AED]" /> Delivery Address
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {[
@@ -293,7 +290,7 @@ export default function CheckoutPage() {
                     onClick={() => setStep(1)}
                     className="w-full rounded-full bg-gradient-to-r from-[#7C3AED] to-[#9B87F5] text-white py-6"
                   >
-                    Continue to Payment <ChevronRight className="w-4 h-4 ml-2" />
+                    Continue to Payment <IoChevronForwardOutline className="w-4 h-4 ml-2" />
                   </Button>
                 </motion.div>
               )}
@@ -305,7 +302,7 @@ export default function CheckoutPage() {
                   className="space-y-6"
                 >
                   <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                    <CreditCard className="w-5 h-5 text-[#7C3AED]" /> Choose Payment Method
+                    <IoCardOutline className="w-5 h-5 text-[#7C3AED]" /> Choose Payment Method
                   </h2>
                   <div className="space-y-3">
                     {PAYMENT_METHODS.map((pm) => (
@@ -337,23 +334,23 @@ export default function CheckoutPage() {
                         <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                           paymentMethod === pm.id ? "border-[#7C3AED] bg-[#7C3AED]" : "border-[#2E2E38]"
                         }`}>
-                          {paymentMethod === pm.id && <Check className="w-3 h-3 text-white" />}
+                          {paymentMethod === pm.id && <IoCheckmark className="w-3 h-3 text-white" />}
                         </div>
                       </button>
                     ))}
                   </div>
                   <div className="flex items-center gap-2 text-xs text-[#9CA3AF]">
-                    <Lock className="w-3.5 h-3.5 text-[#10B981]" /> Secured by Razorpay · PCI-DSS Compliant
+                    <IoLockClosedOutline className="w-3.5 h-3.5 text-[#10B981]" /> Secured by Razorpay · PCI-DSS Compliant
                   </div>
                   <div className="flex gap-3">
                     <Button variant="outline" onClick={() => setStep(0)} className="rounded-full">
-                      <ArrowLeft className="w-4 h-4 mr-2" /> Back
+                      <IoArrowBackOutline className="w-4 h-4 mr-2" /> Back
                     </Button>
                     <Button
                       onClick={() => setStep(2)}
                       className="flex-1 rounded-full bg-gradient-to-r from-[#7C3AED] to-[#9B87F5] text-white"
                     >
-                      Review Order <ChevronRight className="w-4 h-4 ml-2" />
+                      Review Order <IoChevronForwardOutline className="w-4 h-4 ml-2" />
                     </Button>
                   </div>
                 </motion.div>
@@ -392,7 +389,7 @@ export default function CheckoutPage() {
 
                   <div className="flex gap-3">
                     <Button variant="outline" onClick={() => setStep(1)} className="rounded-full">
-                      <ArrowLeft className="w-4 h-4 mr-2" /> Back
+                      <IoArrowBackOutline className="w-4 h-4 mr-2" /> Back
                     </Button>
                     <Button
                       onClick={handlePayment}
@@ -454,7 +451,7 @@ export default function CheckoutPage() {
                 <p className="text-[#10B981] text-xs mt-2">✓ Free shipping applied</p>
               )}
               <div className="flex items-center gap-2 text-[10px] text-[#9CA3AF] mt-4">
-                <Lock className="w-3 h-3 text-[#10B981]" /> PCI-DSS · 7-day returns · GST invoice
+                <IoLockClosedOutline className="w-3 h-3 text-[#10B981]" /> PCI-DSS · 7-day returns · GST invoice
               </div>
             </div>
           </div>
