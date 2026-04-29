@@ -15,10 +15,16 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET || "fallback_secret_for_dev_only"
-    ) as { userId: string };
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+      console.error("JWT_SECRET is not configured");
+      return NextResponse.json(
+        { error: "Authentication is not configured." },
+        { status: 500 }
+      );
+    }
+
+    const decoded = jwt.verify(token, jwtSecret) as { userId: string };
 
     await connectDB();
     const user = await User.findById(decoded.userId).select("-password");

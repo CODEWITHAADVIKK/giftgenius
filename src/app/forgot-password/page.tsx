@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Gift, Mail, ArrowLeft, CheckCircle2 } from "lucide-react";
+import { IoGiftOutline, IoMailOutline, IoArrowBackOutline, IoCheckmarkCircleOutline } from "react-icons/io5";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { useToast } from "@/context/ToastContext";
@@ -55,7 +55,7 @@ export default function ForgotPasswordPage() {
           {sent ? (
             <div className="text-center">
               <div className="w-16 h-16 rounded-2xl bg-[#10B981]/20 flex items-center justify-center mx-auto mb-6">
-                <CheckCircle2 className="h-8 w-8 text-[#10B981]" />
+                <IoCheckmarkCircleOutline className="h-8 w-8 text-[#10B981]" />
               </div>
               <h2 className="text-xl font-bold text-white mb-2">Check Your Email</h2>
               <p className="text-[#9CA3AF] text-sm mb-6">
@@ -76,7 +76,7 @@ export default function ForgotPasswordPage() {
                   href="/"
                   className="inline-flex items-center gap-2 text-white font-bold text-2xl mb-2"
                 >
-                  <Gift className="h-8 w-8 text-[#7C3AED]" />
+                  <IoGiftOutline className="h-8 w-8 text-[#7C3AED]" />
                   <span className="bg-gradient-to-r from-[#7C3AED] to-[#E8A87C] bg-clip-text text-transparent">
                     GiftGenius
                   </span>
@@ -93,7 +93,7 @@ export default function ForgotPasswordPage() {
                 <div className="space-y-1">
                   <label htmlFor="forgot-email" className="text-xs text-[#9CA3AF]">Email</label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-3 h-5 w-5 text-[#9CA3AF]" />
+                    <IoMailOutline className="absolute left-3 top-3 h-5 w-5 text-[#9CA3AF]" />
                     <input
                       id="forgot-email"
                       type="email"
@@ -120,7 +120,7 @@ export default function ForgotPasswordPage() {
                   href="/login"
                   className="text-[#9B87F5] hover:text-white transition-colors inline-flex items-center gap-1"
                 >
-                  <ArrowLeft className="h-3 w-3" />
+                  <IoArrowBackOutline className="h-3 w-3" />
                   Back to Sign In
                 </Link>
               </p>

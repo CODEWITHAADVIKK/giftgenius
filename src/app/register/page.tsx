@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Gift, Mail, Lock, User } from "lucide-react";
+import { IoGiftOutline, IoMailOutline, IoLockClosedOutline, IoPersonOutline } from "react-icons/io5";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/context/ToastContext";
 import { Navbar } from "@/components/layout/navbar";
@@ -49,7 +49,7 @@ export default function RegisterPage() {
         <div className="w-full max-w-md liquid-glass-strong rounded-2xl p-8 relative z-10">
           <div className="text-center mb-8">
             <Link href="/" className="inline-flex items-center gap-2 text-white font-bold text-2xl mb-2">
-              <Gift className="h-8 w-8 text-[#7C3AED]" />
+              <IoGiftOutline className="h-8 w-8 text-[#7C3AED]" />
               <span className="bg-gradient-to-r from-[#7C3AED] to-[#E8A87C] bg-clip-text text-transparent">GiftGenius</span>
             </Link>
             <p className="text-[#9CA3AF] text-sm">Create a new account</p>
@@ -59,7 +59,7 @@ export default function RegisterPage() {
             <div className="space-y-1">
               <label className="text-xs text-[#9CA3AF]">Full Name</label>
               <div className="relative">
-                <User className="absolute left-3 top-3 h-5 w-5 text-[#9CA3AF]" />
+                <IoPersonOutline className="absolute left-3 top-3 h-5 w-5 text-[#9CA3AF]" />
                 <input
                   type="text"
                   required
@@ -74,7 +74,7 @@ export default function RegisterPage() {
             <div className="space-y-1">
               <label className="text-xs text-[#9CA3AF]">Email</label>
               <div className="relative">
-                <Mail className="absolute left-3 top-3 h-5 w-5 text-[#9CA3AF]" />
+                <IoMailOutline className="absolute left-3 top-3 h-5 w-5 text-[#9CA3AF]" />
                 <input
                   type="email"
                   required
@@ -89,7 +89,7 @@ export default function RegisterPage() {
             <div className="space-y-1">
               <label className="text-xs text-[#9CA3AF]">Password</label>
               <div className="relative">
-                <Lock className="absolute left-3 top-3 h-5 w-5 text-[#9CA3AF]" />
+                <IoLockClosedOutline className="absolute left-3 top-3 h-5 w-5 text-[#9CA3AF]" />
                 <input
                   type="password"
                   required

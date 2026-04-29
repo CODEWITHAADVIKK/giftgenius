@@ -10,7 +10,7 @@ import { NextRequest } from "next/server";
 export async function POST(req: NextRequest) {
   try {
     // Rate limit
-    const limited = await authLimiter(req);
+    const limited = authLimiter(req);
     if (limited) return limited;
 
     await connectDB();

@@ -9,7 +9,7 @@ import { authLimiter } from "@/lib/rate-limit";
 export async function POST(req: NextRequest) {
   try {
     // Rate limit
-    const limited = await authLimiter(req);
+    const limited = authLimiter(req);
     if (limited) return limited;
 
     const body = await req.json();
@@ -35,9 +35,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+      console.error("JWT_SECRET is not configured");
+      return NextResponse.json(
+        { error: "Authentication is not configured." },
+        { status: 500 }
+      );
+    }
+
     const token = jwt.sign(
       { userId: user._id.toString() },
-      process.env.JWT_SECRET || "fallback_secret_for_dev_only",
+      jwtSecret,
       { expiresIn: "7d" }
     );
 
