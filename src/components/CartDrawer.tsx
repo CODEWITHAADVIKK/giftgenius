@@ -1,5 +1,5 @@
 "use client";
-import { X, Trash2, Plus, Minus, ShoppingBag, ArrowRight } from "lucide-react";
+import { IoCloseOutline, IoTrashOutline, IoAddOutline, IoRemoveOutline, IoCartOutline, IoArrowForwardOutline } from "react-icons/io5";
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -33,7 +33,7 @@ export function CartDrawer() {
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-[#2E2E38]">
               <div className="flex items-center gap-2">
-                <ShoppingBag className="h-5 w-5 text-[#7C3AED]" />
+                <IoCartOutline className="h-5 w-5 text-[#7C3AED]" />
                 <h2 className="text-white font-semibold text-lg">Your Cart</h2>
                 {items.length > 0 && (
                   <span className="rounded-full bg-[#7C3AED] px-2 py-0.5 text-xs text-white">
@@ -47,7 +47,7 @@ export function CartDrawer() {
                            flex items-center justify-center text-[#9CA3AF] 
                            hover:text-white transition-colors"
               >
-                <X className="h-4 w-4" />
+                <IoCloseOutline className="h-4 w-4" />
               </button>
             </div>
 
@@ -57,7 +57,7 @@ export function CartDrawer() {
                 <div className="flex flex-col items-center justify-center h-full text-center gap-4">
                   <div className="h-20 w-20 rounded-full bg-[#1F2023] border border-[#2E2E38] 
                                   flex items-center justify-center">
-                    <ShoppingBag className="h-8 w-8 text-[#9CA3AF]" />
+                    <IoCartOutline className="h-8 w-8 text-[#9CA3AF]" />
                   </div>
                   <p className="text-[#9CA3AF]">Your cart is empty</p>
                   <Button
@@ -96,7 +96,7 @@ export function CartDrawer() {
                           className="h-6 w-6 rounded-full bg-[#2E2E38] flex items-center 
                                      justify-center text-[#9CA3AF] hover:text-white"
                         >
-                          <Minus className="h-3 w-3" />
+                          <IoRemoveOutline className="h-3 w-3" />
                         </button>
                         <span className="text-white text-sm w-6 text-center">
                           {item.quantity}
@@ -106,13 +106,13 @@ export function CartDrawer() {
                           className="h-6 w-6 rounded-full bg-[#2E2E38] flex items-center 
                                      justify-center text-[#9CA3AF] hover:text-white"
                         >
-                          <Plus className="h-3 w-3" />
+                          <IoAddOutline className="h-3 w-3" />
                         </button>
                         <button
                           onClick={() => removeItem(item.id)}
                           className="ml-auto text-[#9CA3AF] hover:text-red-400 transition-colors"
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <IoTrashOutline className="h-4 w-4" />
                         </button>
                       </div>
                     </div>
@@ -142,7 +142,7 @@ export function CartDrawer() {
                                      hover:shadow-[0_0_40px_rgba(124,58,237,0.6)] 
                                      transition-all group">
                     Proceed to Checkout
-                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                    <IoArrowForwardOutline className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
                 <button

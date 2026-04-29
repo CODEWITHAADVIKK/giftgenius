@@ -34,11 +34,10 @@ const STORAGE_KEY = "giftgenius_wishlist";
 
 export function WishlistProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<WishlistItem[]>([]);
-  const hydrated = useRef(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    if (hydrated.current) return;
-    hydrated.current = true;
+    if (isLoaded) return;
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
@@ -47,17 +46,19 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
       }
     } catch (_e) {
       localStorage.removeItem(STORAGE_KEY);
+    } finally {
+      setIsLoaded(true);
     }
-  }, []);
+  }, []); // Remove dependency on isLoaded to prevent infinite loops if Strict Mode runs twice
 
   useEffect(() => {
-    if (!hydrated.current) return;
+    if (!isLoaded) return;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
     } catch (_e) {
       // storage full — ignore
     }
-  }, [items]);
+  }, [items, isLoaded]);
 
   const addItem = useCallback((item: WishlistItem) => {
     setItems((prev) => {

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Heart, ShoppingBag, Trash2, ArrowLeft } from "lucide-react";
+import { IoHeartOutline, IoCartOutline, IoTrashOutline, IoArrowBackOutline } from "react-icons/io5";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { useWishlist } from "@/context/WishlistContext";
@@ -35,7 +35,7 @@ export default function WishlistPage() {
           className="mb-8"
         >
           <div className="flex items-center gap-3 mb-2">
-            <Heart className="w-6 h-6 text-red-400 fill-red-400" />
+            <IoHeartOutline className="w-6 h-6 text-red-400 fill-red-400" />
             <h1 className="text-3xl md:text-4xl font-bold text-white">
               Your Wishlist
             </h1>
@@ -51,7 +51,7 @@ export default function WishlistPage() {
             animate={{ opacity: 1 }}
             className="text-center py-20"
           >
-            <Heart className="w-16 h-16 text-white/10 mx-auto mb-6" />
+            <IoHeartOutline className="w-16 h-16 text-white/10 mx-auto mb-6" />
             <h2 className="text-xl font-semibold text-white/60 mb-2">
               Your wishlist is empty
             </h2>
@@ -62,7 +62,7 @@ export default function WishlistPage() {
               href="/products"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#7C3AED] to-[#9B87F5] text-white text-sm font-medium hover:shadow-[0_0_20px_rgba(124,58,237,0.4)] transition-all"
             >
-              <ArrowLeft className="w-4 h-4" />
+              <IoArrowBackOutline className="w-4 h-4" />
               Explore Gifts
             </Link>
           </motion.div>
@@ -120,7 +120,7 @@ export default function WishlistPage() {
                       }}
                       className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#7C3AED]/15 text-[#9B87F5] text-[11px] font-medium hover:bg-[#7C3AED]/25 transition-colors"
                     >
-                      <ShoppingBag className="w-3 h-3" />
+                      <IoCartOutline className="w-3 h-3" />
                       Add to Cart
                     </button>
                     <button
@@ -130,7 +130,7 @@ export default function WishlistPage() {
                       }}
                       className="flex items-center gap-1.5 px-3 py-2 rounded-full bg-red-500/10 text-red-400 text-[11px] hover:bg-red-500/20 transition-colors"
                     >
-                      <Trash2 className="w-3 h-3" />
+                      <IoTrashOutline className="w-3 h-3" />
                     </button>
                   </div>
                 </div>
