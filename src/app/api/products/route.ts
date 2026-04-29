@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { products, searchProducts, getProductsByCategory } from "@/lib/data";
+import { products, searchProducts } from "@/lib/data";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);

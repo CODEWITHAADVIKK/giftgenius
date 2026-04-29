@@ -6,10 +6,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
-import {
-  ArrowLeft, ArrowRight, Sparkles, Gift, ShoppingBag,
-  Heart, Star, Eye,
-} from "lucide-react";
+import { IoArrowBackOutline, IoArrowForwardOutline, IoSparklesOutline, IoGiftOutline, IoCartOutline, IoHeartOutline, IoStar, IoEyeOutline } from "react-icons/io5";
 import { products } from "@/lib/data";
 import { formatINR } from "@/lib/utils";
 import { useCart } from "@/context/CartContext";
@@ -176,7 +173,7 @@ export default function GiftFinderPage() {
             className="text-center mb-12"
           >
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-violet/30 to-gold/30 flex items-center justify-center mx-auto mb-4">
-              <Sparkles className="w-7 h-7 text-gold" />
+              <IoSparklesOutline className="w-7 h-7 text-gold" />
             </div>
             <h1 className="text-3xl md:text-4xl font-[var(--font-heading)] italic text-white mb-2">
               Your Perfect Picks
@@ -234,7 +231,7 @@ export default function GiftFinderPage() {
                         {i === 0 ? "TOP PICK" : `#${i + 1} MATCH`}
                       </span>
                       <span className="text-[9px] text-gold flex items-center gap-0.5">
-                        <Star className="w-3 h-3 fill-gold" /> {prod.rating}
+                        <IoStar className="w-3 h-3 fill-gold" /> {prod.rating}
                       </span>
                     </div>
                     <h3 className="text-sm font-semibold text-white font-[var(--font-display)]">
@@ -269,13 +266,13 @@ export default function GiftFinderPage() {
                         }}
                         className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-violet text-white text-[11px] font-medium hover:bg-violet-light transition-colors"
                       >
-                        <ShoppingBag className="w-3 h-3" /> Add to Cart
+                        <IoCartOutline className="w-3 h-3" /> Add to Cart
                       </button>
                       <Link
                         href={`/products/${prod.slug}`}
                         className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/5 text-white/60 text-[11px] hover:bg-white/10 transition-colors"
                       >
-                        <Eye className="w-3 h-3" /> View
+                        <IoEyeOutline className="w-3 h-3" /> View
                       </Link>
                     </div>
                   </div>
@@ -334,7 +331,7 @@ export default function GiftFinderPage() {
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center justify-center gap-2 mb-8"
           >
-            <Sparkles className="w-4 h-4 text-gold" />
+            <IoSparklesOutline className="w-4 h-4 text-gold" />
             <span className="text-xs text-white/50 font-[var(--font-body)]">
               AI Gift Wizard · Step {step + 1} of {STEPS.length}
             </span>
@@ -425,7 +422,7 @@ export default function GiftFinderPage() {
                     : "text-transparent pointer-events-none"
                 }`}
               >
-                <ArrowLeft className="w-3 h-3" /> Back
+                <IoArrowBackOutline className="w-3 h-3" /> Back
               </button>
               <button
                 onClick={() => {

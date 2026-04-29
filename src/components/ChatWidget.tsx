@@ -1,14 +1,31 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Send, Mic, MicOff, Sparkles, MessageCircle } from "lucide-react";
+import { IoCloseOutline, IoSendOutline, IoMicOutline, IoMicOffOutline, IoSparklesOutline, IoStar, IoCartOutline, IoChatbubblesOutline } from "react-icons/io5";
 import { useVoiceSearch } from "@/lib/useVoiceSearch";
+import { useCart, CartItem } from "@/context/CartContext";
+
+// ─── Types ───────────────────────────────────────────────────────────────────
+
+type GiftProduct = {
+  id: string;
+  name: string;
+  price: number;
+  originalPrice: number;
+  image: string;
+  slug: string;
+  rating: number;
+  matchScore: number;
+  matchReason: string;
+};
 
 type Message = {
   id: string;
   role: "user" | "ai";
   text: string;
+  products?: GiftProduct[];
 };
 
 const INITIAL_MESSAGES: Message[] = [
@@ -20,14 +37,72 @@ const INITIAL_MESSAGES: Message[] = [
 ];
 
 const QUICK_REPLIES = [
-  "Gift for Mom",
-  "Gift for him",
-  "Birthday gift",
-  "Corporate gifts",
-  "Budget under ₹1000",
+  "🎁 Gift for Mom",
+  "🎂 Birthday gift",
+  "💼 Corporate gift",
+  "👩 Gift for her under ₹1500",
+  "🎤 Voice search",
 ];
 
 let nextMessageId = 1;
+
+// ─── Product Card Component ─────────────────────────────────────────────────
+
+function ProductCard({ product }: { product: GiftProduct }) {
+  const { addItem } = useCart();
+
+  const handleAddToCart = () => {
+    const cartItem: CartItem = {
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      quantity: 1,
+    };
+    addItem(cartItem);
+  };
+
+  return (
+    <div className="flex gap-2.5 p-2 rounded-xl bg-[#0D0F1A] border border-[#2E2E38] hover:border-[#7C3AED]/30 transition-all group">
+      <Link href={`/products/${product.slug}`} className="flex-shrink-0">
+        <div className="w-14 h-14 rounded-lg overflow-hidden bg-[#1F2023]">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+          />
+        </div>
+      </Link>
+      <div className="flex-1 min-w-0">
+        <Link href={`/products/${product.slug}`}>
+          <p className="text-[11px] text-white font-medium truncate hover:text-[#9B87F5] transition-colors">
+            {product.name}
+          </p>
+        </Link>
+        <div className="flex items-center gap-1 mt-0.5">
+          <span className="text-[11px] text-white font-bold">₹{product.price.toLocaleString()}</span>
+          <span className="text-[9px] text-[#9CA3AF] line-through">₹{product.originalPrice.toLocaleString()}</span>
+          <span className="flex items-center gap-0.5 text-[9px] text-[#F59E0B] ml-1">
+            <IoStar size={10} className="text-[#F59E0B]" />
+            {product.rating}
+          </span>
+        </div>
+        <div className="flex items-center justify-between mt-1">
+          <span className="text-[8px] text-[#10B981]">{product.matchReason}</span>
+          <button
+            onClick={handleAddToCart}
+            className="text-[8px] px-2 py-0.5 rounded-full bg-[#7C3AED]/20 text-[#9B87F5] hover:bg-[#7C3AED] hover:text-white transition-all flex items-center gap-0.5"
+          >
+            <IoCartOutline size={10} />
+            Add
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Chat Widget ─────────────────────────────────────────────────────────────
 
 export function ChatWidget() {
   const [open, setOpen] = useState(false);
@@ -36,16 +111,17 @@ export function ChatWidget() {
   const [loading, setLoading] = useState(false);
   const bodyRef = useRef<HTMLDivElement>(null);
 
-  const { isListening, isSupported, toggleListening } = useVoiceSearch(
-    (transcript) => {
-      setInput(transcript);
-      // Auto-send after voice recognition
-      setTimeout(() => sendMessage(transcript), 300);
-    }
-  );
+  // Voice search — auto-sends after recognition
+  const handleVoiceResult = useCallback((transcript: string) => {
+    setInput(transcript);
+    setTimeout(() => sendMessage(transcript), 300);
+  }, []);
+
+  const { isListening, isSupported, toggleListening } = useVoiceSearch(handleVoiceResult);
 
   const sendMessage = async (text: string) => {
     if (!text.trim()) return;
+
     const userMsg: Message = {
       id: `msg-${nextMessageId++}`,
       role: "user",
@@ -56,7 +132,6 @@ export function ChatWidget() {
     setLoading(true);
 
     try {
-      // Build history for context (last 10 messages)
       const history = messages
         .filter((m) => m.id !== "0")
         .slice(-10)
@@ -73,10 +148,16 @@ export function ChatWidget() {
 
       const data = await res.json();
       const aiText = data.reply || "I'm having trouble right now. Please try again!";
+      const products = data.products || [];
 
       setMessages((prev) => [
         ...prev,
-        { id: `msg-${nextMessageId++}`, role: "ai", text: aiText },
+        {
+          id: `msg-${nextMessageId++}`,
+          role: "ai",
+          text: aiText,
+          products,
+        },
       ]);
     } catch {
       setMessages((prev) => [
@@ -92,15 +173,37 @@ export function ChatWidget() {
     }
   };
 
+  // Handle quick reply — voice search opens mic, others send text
+  const handleQuickReply = (reply: string) => {
+    if (reply === "🎤 Voice search") {
+      if (isSupported) {
+        toggleListening();
+      } else {
+        sendMessage("I want to use voice search");
+      }
+      return;
+    }
+    sendMessage(reply);
+  };
+
+  // Auto-scroll on new messages
   useEffect(() => {
     if (bodyRef.current) {
       bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
     }
   }, [messages, loading]);
 
+  // Format AI text — bold, links, etc.
+  const formatText = (text: string) => {
+    return text
+      .replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em class="text-[#9CA3AF]">$1</em>')
+      .replace(/~~(.*?)~~/g, '<del class="text-[#9CA3AF]/50">$1</del>');
+  };
+
   return (
     <>
-      {/* Floating Trigger — Modern chat bubble, no gift icon */}
+      {/* Floating Trigger — Voice Search Mic */}
       <motion.button
         className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-[#7C3AED] to-[#9B87F5] shadow-lg shadow-[#7C3AED]/30 flex items-center justify-center hover:shadow-[#7C3AED]/50 transition-shadow"
         whileHover={{ scale: 1.1 }}
@@ -111,14 +214,14 @@ export function ChatWidget() {
         style={{ display: open ? "none" : "flex" }}
         aria-label="Open AI Gift Advisor"
       >
-        <MessageCircle className="w-6 h-6 text-white" />
+        <IoMicOutline size={24} className="text-white" />
       </motion.button>
 
       {/* Chat Window */}
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed bottom-6 right-6 z-50 w-[360px] sm:w-[400px] max-h-[580px] flex flex-col rounded-2xl overflow-hidden shadow-2xl shadow-[#7C3AED]/10"
+            className="fixed bottom-6 right-6 z-50 w-[360px] sm:w-[400px] max-h-[600px] flex flex-col rounded-2xl overflow-hidden shadow-2xl shadow-[#7C3AED]/10"
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
@@ -128,7 +231,7 @@ export function ChatWidget() {
             {/* Header */}
             <div className="bg-gradient-to-r from-[#7C3AED] to-[#9B87F5] p-4 flex items-center gap-3">
               <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-white" />
+                <IoSparklesOutline size={20} className="text-white" />
               </div>
               <div className="flex-1">
                 <div className="text-sm font-bold text-white">
@@ -136,14 +239,14 @@ export function ChatWidget() {
                 </div>
                 <div className="text-[10px] text-white/80 flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
-                  Online · Tell me about your recipient
+                  {isListening ? "🎤 Listening..." : "Online · AI + Voice enabled"}
                 </div>
               </div>
               <button
                 onClick={() => setOpen(false)}
                 className="text-white/70 hover:text-white transition-colors"
               >
-                <X className="w-4 h-4" />
+                <IoCloseOutline size={16} />
               </button>
             </div>
 
@@ -151,24 +254,38 @@ export function ChatWidget() {
             <div
               ref={bodyRef}
               className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#0D0F1A]"
-              style={{ maxHeight: 340 }}
+              style={{ maxHeight: 360 }}
             >
               {messages.map((msg) => (
-                <div
-                  key={msg.id}
-                  className={`flex ${
-                    msg.role === "user" ? "justify-end" : "justify-start"
-                  }`}
-                >
-                  <div
-                    className={`max-w-[82%] rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed whitespace-pre-line ${
-                      msg.role === "user"
-                        ? "bg-[#7C3AED] text-white rounded-br-sm"
-                        : "bg-[#1F2023] text-white/90 rounded-bl-sm border border-[#2E2E38]"
-                    }`}
-                  >
-                    {msg.text}
+                <div key={msg.id}>
+                  {/* Message bubble */}
+                  <div className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                    <div
+                      className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed ${
+                        msg.role === "user"
+                          ? "bg-[#7C3AED] text-white rounded-br-sm"
+                          : "bg-[#1F2023] text-white/90 rounded-bl-sm border border-[#2E2E38]"
+                      }`}
+                    >
+                      {msg.role === "ai" ? (
+                        <div
+                          className="whitespace-pre-line"
+                          dangerouslySetInnerHTML={{ __html: formatText(msg.text) }}
+                        />
+                      ) : (
+                        <span className="whitespace-pre-line">{msg.text}</span>
+                      )}
+                    </div>
                   </div>
+
+                  {/* Product Cards — render below AI message */}
+                  {msg.products && msg.products.length > 0 && (
+                    <div className="mt-2 space-y-2 pl-1">
+                      {msg.products.map((product) => (
+                        <ProductCard key={product.id} product={product} />
+                      ))}
+                    </div>
+                  )}
                 </div>
               ))}
 
@@ -199,8 +316,12 @@ export function ChatWidget() {
               {QUICK_REPLIES.map((r) => (
                 <button
                   key={r}
-                  onClick={() => sendMessage(r)}
-                  className="text-[10px] px-3 py-1.5 rounded-full border border-[#2E2E38] text-[#9CA3AF] hover:border-[#7C3AED]/40 hover:text-white/80 transition-colors whitespace-nowrap flex-shrink-0"
+                  onClick={() => handleQuickReply(r)}
+                  className={`text-[10px] px-3 py-1.5 rounded-full border text-[#9CA3AF] hover:border-[#7C3AED]/40 hover:text-white/80 transition-colors whitespace-nowrap flex-shrink-0 ${
+                    r === "🎤 Voice search"
+                      ? "border-[#7C3AED]/30 bg-[#7C3AED]/5"
+                      : "border-[#2E2E38]"
+                  }`}
                 >
                   {r}
                 </button>
@@ -215,7 +336,7 @@ export function ChatWidget() {
                 onKeyDown={(e) =>
                   e.key === "Enter" && !e.shiftKey && sendMessage(input)
                 }
-                placeholder="Describe who you're gifting..."
+                placeholder={isListening ? "🎤 Listening..." : "Describe who you're gifting..."}
                 className="flex-1 bg-[#0D0F1A] rounded-full px-4 py-2.5 text-xs text-white placeholder:text-[#9CA3AF]/40 outline-none border border-[#2E2E38] focus:border-[#7C3AED]/40 transition-colors"
               />
               {/* Voice button */}
@@ -230,22 +351,23 @@ export function ChatWidget() {
                   aria-label={isListening ? "Stop listening" : "Voice input"}
                 >
                   {isListening ? (
-                    <MicOff className="w-3.5 h-3.5" />
+                    <IoMicOffOutline size={14} />
                   ) : (
-                    <Mic className="w-3.5 h-3.5" />
+                    <IoMicOutline size={14} />
                   )}
                 </button>
               )}
               <button
                 onClick={() => sendMessage(input)}
-                className="w-9 h-9 rounded-full bg-[#7C3AED] hover:bg-[#9B87F5] flex items-center justify-center text-white transition-colors flex-shrink-0"
+                disabled={loading}
+                className="w-9 h-9 rounded-full bg-[#7C3AED] hover:bg-[#9B87F5] flex items-center justify-center text-white transition-colors flex-shrink-0 disabled:opacity-50"
               >
-                <Send className="w-3.5 h-3.5" />
+                <IoSendOutline size={14} />
               </button>
             </div>
 
             <div className="text-center text-[9px] text-[#9CA3AF]/40 py-1.5 bg-[#1F2023]">
-              Powered by GiftGenius AI · Voice enabled
+              Powered by GiftGenius AI · NLU + Gift Discovery Engine
             </div>
           </motion.div>
         )}

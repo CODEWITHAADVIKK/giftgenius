@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import { Send, Sparkles, Loader2 } from "lucide-react";
+import { IoSendOutline, IoSparklesOutline, IoReloadOutline } from "react-icons/io5";
 
 interface PromptInputBoxProps {
   onSend: (message: string) => void;
@@ -53,7 +53,7 @@ export function PromptInputBox({
 
       <div className="relative flex items-end gap-3 p-4">
         <div className="flex items-center justify-center h-10 w-10 rounded-full bg-[#7C3AED]/10 border border-[#7C3AED]/20 flex-shrink-0">
-          <Sparkles className="h-5 w-5 text-[#9B87F5]" />
+          <IoSparklesOutline className="h-5 w-5 text-[#9B87F5]" />
         </div>
 
         <textarea
@@ -72,9 +72,9 @@ export function PromptInputBox({
           className="flex items-center justify-center h-10 w-10 rounded-full bg-gradient-to-r from-[#7C3AED] to-[#9B87F5] text-white shadow-[0_0_20px_rgba(124,58,237,0.4)] hover:shadow-[0_0_30px_rgba(124,58,237,0.6)] hover:scale-105 active:scale-95 transition-all duration-300 disabled:opacity-40 disabled:hover:scale-100 disabled:hover:shadow-none flex-shrink-0 cursor-pointer"
         >
           {isLoading ? (
-            <Loader2 className="h-5 w-5 animate-spin" />
+            <IoReloadOutline className="h-5 w-5 animate-spin" />
           ) : (
-            <Send className="h-5 w-5" />
+            <IoSendOutline className="h-5 w-5" />
           )}
         </button>
       </div>
@@ -83,7 +83,7 @@ export function PromptInputBox({
       <div className="px-4 pb-3 flex items-center justify-between text-xs text-[#9CA3AF]/50">
         <span>Press Enter to send, Shift+Enter for new line</span>
         <span className="flex items-center gap-1">
-          <Sparkles className="h-3 w-3" /> AI-Powered
+          <IoSparklesOutline className="h-3 w-3" /> AI-Powered
         </span>
       </div>
     </div>
