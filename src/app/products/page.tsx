@@ -15,6 +15,7 @@ import { products } from "@/lib/data";
 import { formatINR } from "@/lib/utils";
 import { useCart } from "@/context/CartContext";
 import { useToast } from "@/context/ToastContext";
+import { useWishlist } from "@/context/WishlistContext";
 import { useVoiceSearch } from "@/lib/useVoiceSearch";
 
 const CATEGORIES = [
@@ -258,21 +259,24 @@ function ProductsContent() {
                       {formatINR(product.basePrice)}
                     </span>
                   </div>
-                  <button
-                    onClick={() => {
-                      addItem({
-                        id: product.id,
-                        name: product.name,
-                        price: product.price,
-                        quantity: 1,
-                        image: product.image,
-                      });
-                      addToast("cart", "Added to Cart", product.name);
-                    }}
-                    className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-violet/15 text-violet-light text-[11px] font-medium hover:bg-violet/25 transition-colors mt-1"
-                  >
-                    <ShoppingBag className="w-3 h-3" /> Add to Cart
-                  </button>
+                  <div className="flex gap-2 mt-1">
+                    <button
+                      onClick={() => {
+                        addItem({
+                          id: product.id,
+                          name: product.name,
+                          price: product.price,
+                          quantity: 1,
+                          image: product.image,
+                        });
+                        addToast("cart", "Added to Cart", product.name);
+                      }}
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-violet/15 text-violet-light text-[11px] font-medium hover:bg-violet/25 transition-colors"
+                    >
+                      <ShoppingBag className="w-3 h-3" /> Add to Cart
+                    </button>
+                    <WishlistButton product={product} />
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -281,6 +285,37 @@ function ProductsContent() {
       </div>
       <Footer />
     </>
+  );
+}
+
+function WishlistButton({ product }: { product: typeof products[number] }) {
+  const { toggleItem, isWishlisted } = useWishlist();
+  const { addToast } = useToast();
+  const wishlisted = isWishlisted(product.id);
+
+  return (
+    <button
+      onClick={() => {
+        const added = toggleItem({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          image: product.image,
+        });
+        addToast(
+          added ? "success" : "info",
+          added ? "Saved to Wishlist" : "Removed",
+          product.name
+        );
+      }}
+      className={`flex items-center justify-center w-10 rounded-xl transition-all ${
+        wishlisted
+          ? "bg-red-500/15 text-red-400 border border-red-500/30"
+          : "bg-white/5 text-white/40 border border-white/10 hover:text-red-400 hover:border-red-500/30"
+      }`}
+    >
+      <Heart className={`w-3.5 h-3.5 ${wishlisted ? "fill-red-500" : ""}`} />
+    </button>
   );
 }
 

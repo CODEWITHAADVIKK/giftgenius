@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 
 interface VoiceSearchState {
   isListening: boolean;
@@ -10,17 +10,21 @@ interface VoiceSearchState {
 }
 
 export function useVoiceSearch(onResult?: (transcript: string) => void) {
-  const [state, setState] = useState<VoiceSearchState>(() => {
-    const isSupported = typeof window !== "undefined" && !!(window.SpeechRecognition || window.webkitSpeechRecognition);
-    return {
-      isListening: false,
-      transcript: "",
-      error: null,
-      isSupported,
-    };
+  // ✅ Start with isSupported=false (safe for SSR), then detect on client via useEffect
+  const [state, setState] = useState<VoiceSearchState>({
+    isListening: false,
+    transcript: "",
+    error: null,
+    isSupported: false,
   });
 
   const recognitionRef = useRef<SpeechRecognition | null>(null);
+
+  // ✅ Detect support client-side only via useEffect (no typeof window check)
+  useEffect(() => {
+    const supported = !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+    setState((prev) => ({ ...prev, isSupported: supported }));
+  }, []);
 
   const startListening = useCallback(() => {
     const SpeechRecognition =

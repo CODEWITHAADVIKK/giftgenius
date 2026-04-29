@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Gift, Send } from "lucide-react";
-import { IoLogoWhatsapp, IoLogoFacebook, IoLogoInstagram, IoLogoLinkedin } from "react-icons/io5";
+import { Gift, Send, Globe, Camera, Briefcase, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/context/ToastContext";
 
@@ -13,10 +12,10 @@ const footerLinks = {
 };
 
 const socials = [
-  { icon: <IoLogoFacebook className="h-5 w-5" />, label: "Facebook", from: "#1877F2", to: "#4C9EEB" },
-  { icon: <IoLogoInstagram className="h-5 w-5" />, label: "Instagram", from: "#F77737", to: "#E1306C" },
-  { icon: <IoLogoLinkedin className="h-5 w-5" />, label: "LinkedIn", from: "#0A66C2", to: "#5BB5F0" },
-  { icon: <IoLogoWhatsapp className="h-5 w-5" />, label: "WhatsApp", from: "#25D366", to: "#128C7E" },
+  { icon: <Globe className="h-5 w-5" />, label: "Facebook", from: "#1877F2", to: "#4C9EEB" },
+  { icon: <Camera className="h-5 w-5" />, label: "Instagram", from: "#F77737", to: "#E1306C" },
+  { icon: <Briefcase className="h-5 w-5" />, label: "LinkedIn", from: "#0A66C2", to: "#5BB5F0" },
+  { icon: <MessageCircle className="h-5 w-5" />, label: "WhatsApp", from: "#25D366", to: "#128C7E" },
 ];
 
 export function Footer() {

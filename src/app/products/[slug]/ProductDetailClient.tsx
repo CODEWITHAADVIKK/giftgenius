@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { Product } from "@/lib/types";
 import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
 import { useToast } from "@/context/ToastContext";
 import { formatINR } from "@/lib/utils";
 import { products } from "@/lib/data";
@@ -22,10 +23,11 @@ export function ProductDetailClient({ product }: { product: Product }) {
   const [giftWrap, setGiftWrap] = useState(false);
   const [activeTab, setActiveTab] = useState<"desc" | "specs" | "care">("desc");
   const [showAR, setShowAR] = useState(false);
-  const [wishlisted, setWishlisted] = useState(false);
 
   const { addItem } = useCart();
+  const { toggleItem, isWishlisted } = useWishlist();
   const { addToast } = useToast();
+  const wishlisted = isWishlisted(product.id);
 
   const handleAddToCart = () => {
     addItem({
@@ -326,10 +328,15 @@ export function ProductDetailClient({ product }: { product: Product }) {
             </button>
             <button
               onClick={() => {
-                setWishlisted(!wishlisted);
+                const added = toggleItem({
+                  id: product.id,
+                  name: product.name,
+                  price: product.price,
+                  image: product.image,
+                });
                 addToast(
-                  wishlisted ? "info" : "success",
-                  wishlisted ? "Removed from Wishlist" : "Saved to Wishlist",
+                  added ? "success" : "info",
+                  added ? "Saved to Wishlist" : "Removed from Wishlist",
                   product.name
                 );
               }}

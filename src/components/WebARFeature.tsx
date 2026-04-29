@@ -1,7 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ArrowRight, Smartphone, Camera, Zap, Share2 } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, Smartphone, Camera, Zap, Share2, X, RotateCcw } from "lucide-react";
+import { products } from "@/lib/data";
 
 const FEATURES = [
   { icon: Zap, label: "50+ AR Products" },
@@ -10,7 +12,27 @@ const FEATURES = [
   { icon: Share2, label: "Snap & Share" },
 ];
 
+const arProducts = products.filter((p) => p.ar);
+
 export function WebARFeature() {
+  const [activeAR, setActiveAR] = useState<string | null>(null);
+  const [rotation, setRotation] = useState(0);
+  const [scale, setScale] = useState(1);
+  const animRef = useRef<number>(0);
+
+  // Animate rotation when AR is active
+  useEffect(() => {
+    if (!activeAR) return;
+    const animate = () => {
+      setRotation((r) => (r + 0.3) % 360);
+      animRef.current = requestAnimationFrame(animate);
+    };
+    animRef.current = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animRef.current);
+  }, [activeAR]);
+
+  const activeProduct = arProducts.find((p) => p.id === activeAR);
+
   return (
     <section className="py-24 px-4 sm:px-6 lg:px-16 relative overflow-hidden">
       {/* Purple Side Glow */}
@@ -28,9 +50,9 @@ export function WebARFeature() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 liquid-glass rounded-full px-3.5 py-1.5 text-xs text-teal font-[var(--font-body)] mb-6"
+            className="inline-flex items-center gap-2 rounded-full border border-[#10B981]/30 bg-[#10B981]/10 px-3.5 py-1.5 text-xs text-[#10B981] mb-6"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-teal animate-pulse" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
             WebAR Technology
           </motion.div>
 
@@ -39,11 +61,14 @@ export function WebARFeature() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-3xl md:text-4xl lg:text-5xl font-[var(--font-heading)] italic text-white tracking-tight leading-[0.9] mb-6"
+            className="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight mb-6"
           >
             See It In Your Space
             <br />
-            <span className="text-teal">Before</span> You Buy
+            <span className="bg-gradient-to-r from-[#10B981] to-[#7C3AED] bg-clip-text text-transparent">
+              Before
+            </span>{" "}
+            You Buy
           </motion.h2>
 
           <motion.p
@@ -51,10 +76,10 @@ export function WebARFeature() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-sm text-white/50 font-[var(--font-body)] font-light max-w-md mx-auto lg:mx-0 mb-8 leading-relaxed"
+            className="text-sm text-white/50 max-w-md mx-auto lg:mx-0 mb-8 leading-relaxed"
           >
-            Point your phone, place the gift in your room, on your desk, or in your hands.
-            No app downloads. Works instantly on any modern smartphone.
+            Point your phone, place the gift in your room, on your desk, or in your
+            hands. No app downloads. Works instantly on any modern smartphone.
           </motion.p>
 
           {/* Feature Chips */}
@@ -68,9 +93,9 @@ export function WebARFeature() {
             {FEATURES.map((feat) => (
               <div
                 key={feat.label}
-                className="liquid-glass rounded-full px-4 py-2 text-xs text-white/60 font-[var(--font-body)] flex items-center gap-2"
+                className="rounded-full border border-[#2E2E38] bg-[#1F2023] px-4 py-2 text-xs text-white/60 flex items-center gap-2"
               >
-                <feat.icon className="w-3.5 h-3.5 text-teal" />
+                <feat.icon className="w-3.5 h-3.5 text-[#10B981]" />
                 {feat.label}
               </div>
             ))}
@@ -82,62 +107,148 @@ export function WebARFeature() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.4 }}
-            className="inline-flex items-center gap-2 liquid-glass-strong rounded-full px-7 py-3.5 text-sm font-medium text-white hover:scale-[1.03] transition-transform"
+            className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#7C3AED] to-[#9B87F5] px-7 py-3.5 text-sm font-medium text-white hover:scale-[1.03] hover:shadow-[0_0_20px_rgba(124,58,237,0.4)] transition-all"
           >
             Browse AR-Ready Gifts
             <ArrowRight className="w-4 h-4" />
           </motion.a>
         </div>
 
-        {/* Right: Phone Mockup */}
+        {/* Right: Phone Mockup / AR Preview */}
         <motion.div
-          initial={{ opacity: 0, x: 40, rotateY: -10 }}
-          whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
+          initial={{ opacity: 0, x: 40 }}
+          whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3, duration: 0.7 }}
           className="flex-1 flex justify-center"
-          style={{ perspective: "1000px" }}
         >
           <div
-            className="relative w-72 h-[520px] rounded-[40px] bg-card-2 border-2 border-white/10 overflow-hidden shadow-2xl shadow-violet/10"
-            style={{ transform: "rotateY(-5deg) rotateX(2deg)" }}
+            className="relative w-72 h-[520px] rounded-[40px] bg-[#1F2023] border-2 border-white/10 overflow-hidden shadow-2xl shadow-[#7C3AED]/10"
+            style={{ transform: "rotateY(-5deg) rotateX(2deg)", perspective: "1000px" }}
           >
             {/* Phone Screen Content */}
-            <div className="absolute inset-3 rounded-[32px] bg-surface overflow-hidden">
-              <div className="h-full flex flex-col items-center justify-center gap-4 p-6">
-                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-violet/20 to-teal/20 flex items-center justify-center">
-                  <span className="text-4xl">🖼️</span>
-                </div>
-                <div className="text-center">
-                  <p className="text-xs text-white/60 font-[var(--font-body)] mb-1">
-                    Placing in your room...
-                  </p>
-                  <p className="text-sm font-semibold text-white font-[var(--font-display)]">
-                    Silver Photo Frame
-                  </p>
-                  <p className="text-xs text-gold font-[var(--font-mono)] mt-1">
-                    ₹2,499
-                  </p>
-                </div>
-                <div className="flex gap-2">
-                  <span className="liquid-glass rounded-full px-3 py-1.5 text-[10px] text-teal flex items-center gap-1">
-                    <Camera className="w-3 h-3" /> Snap
-                  </span>
-                  <span className="liquid-glass rounded-full px-3 py-1.5 text-[10px] text-white/60 flex items-center gap-1">
-                    <Share2 className="w-3 h-3" /> Share
-                  </span>
-                </div>
-                {/* AR Grid Lines */}
-                <div className="absolute inset-0 opacity-10 pointer-events-none">
-                  <div className="absolute inset-8 border border-teal/30 rounded-lg" />
-                  <div className="absolute left-1/2 top-8 bottom-8 w-px bg-teal/20" />
-                  <div className="absolute top-1/2 left-8 right-8 h-px bg-teal/20" />
-                </div>
-              </div>
+            <div className="absolute inset-3 rounded-[32px] bg-[#0D0F1A] overflow-hidden">
+              <AnimatePresence mode="wait">
+                {activeProduct ? (
+                  <motion.div
+                    key="ar-view"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="h-full flex flex-col"
+                  >
+                    {/* AR Header */}
+                    <div className="flex items-center justify-between p-3">
+                      <span className="text-[10px] text-[#10B981] flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
+                        AR Active
+                      </span>
+                      <button
+                        onClick={() => { setActiveAR(null); setScale(1); }}
+                        className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center"
+                      >
+                        <X className="w-3 h-3 text-white/60" />
+                      </button>
+                    </div>
+
+                    {/* AR Product View */}
+                    <div className="flex-1 flex items-center justify-center relative">
+                      {/* Grid lines */}
+                      <div className="absolute inset-4 border border-[#10B981]/20 rounded-lg" />
+                      <div className="absolute left-1/2 top-4 bottom-4 w-px bg-[#10B981]/10" />
+                      <div className="absolute top-1/2 left-4 right-4 h-px bg-[#10B981]/10" />
+
+                      <div
+                        style={{
+                          transform: `rotateY(${rotation}deg) scale(${scale})`,
+                          transition: "transform 0.1s linear",
+                        }}
+                        className="w-32 h-32 rounded-2xl overflow-hidden shadow-lg shadow-[#7C3AED]/20"
+                      >
+                        <img
+                          src={activeProduct.image}
+                          alt={activeProduct.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    </div>
+
+                    {/* AR Controls */}
+                    <div className="p-3 space-y-2">
+                      <p className="text-sm font-semibold text-white text-center">
+                        {activeProduct.name}
+                      </p>
+                      <p className="text-xs text-[#10B981] text-center">
+                        ₹{activeProduct.price.toLocaleString()}
+                      </p>
+                      <div className="flex justify-center gap-2">
+                        <button
+                          onClick={() => setScale((s) => Math.min(s + 0.2, 2))}
+                          className="px-3 py-1.5 rounded-full bg-white/5 text-white/60 text-[10px] border border-white/10"
+                        >
+                          + Zoom
+                        </button>
+                        <button
+                          onClick={() => setScale((s) => Math.max(s - 0.2, 0.4))}
+                          className="px-3 py-1.5 rounded-full bg-white/5 text-white/60 text-[10px] border border-white/10"
+                        >
+                          − Zoom
+                        </button>
+                        <button
+                          onClick={() => { setRotation(0); setScale(1); }}
+                          className="px-3 py-1.5 rounded-full bg-white/5 text-white/60 text-[10px] border border-white/10"
+                        >
+                          <RotateCcw className="w-3 h-3" />
+                        </button>
+                      </div>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="product-list"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="h-full flex flex-col"
+                  >
+                    <div className="p-3 border-b border-white/5">
+                      <p className="text-[11px] text-white/60 font-medium">
+                        📱 Tap a product to view in AR
+                      </p>
+                    </div>
+                    <div className="flex-1 overflow-y-auto p-3 space-y-2" style={{ scrollbarWidth: "none" }}>
+                      {arProducts.map((p) => (
+                        <button
+                          key={p.id}
+                          onClick={() => setActiveAR(p.id)}
+                          className="w-full flex items-center gap-3 p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-[#7C3AED]/30 hover:bg-[#7C3AED]/5 transition-all text-left"
+                        >
+                          <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-[#1F2023]">
+                            <img
+                              src={p.image}
+                              alt={p.name}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs font-medium text-white truncate">
+                              {p.name}
+                            </p>
+                            <p className="text-[10px] text-[#10B981]">
+                              ₹{p.price.toLocaleString()} · AR Ready
+                            </p>
+                          </div>
+                          <Camera className="w-4 h-4 text-white/20 flex-shrink-0" />
+                        </button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             {/* Phone Notch */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-card-2 rounded-b-2xl" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-[#1F2023] rounded-b-2xl" />
           </div>
         </motion.div>
       </div>

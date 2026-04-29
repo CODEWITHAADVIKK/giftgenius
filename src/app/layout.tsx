@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { CartProvider } from "@/context/CartContext";
-import { AuthProvider } from "@/context/AuthContext";
-import { ToastProvider } from "@/context/ToastContext";
+import { Providers } from "@/components/Providers";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -63,14 +61,8 @@ export default function RootLayout({
         <meta name="color-scheme" content="dark" />
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body className={`${inter.variable} font-sans bg-[#0D0F1A] antialiased`}>
-        <ToastProvider>
-          <AuthProvider>
-            <CartProvider>
-              {children}
-            </CartProvider>
-          </AuthProvider>
-        </ToastProvider>
+      <body className={`${inter.variable} font-sans bg-[#0D0F1A] antialiased`} suppressHydrationWarning>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
