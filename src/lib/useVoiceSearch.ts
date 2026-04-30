@@ -23,6 +23,7 @@ export function useVoiceSearch(onResult?: (transcript: string) => void) {
   // ✅ Detect support client-side only via useEffect (no typeof window check)
   useEffect(() => {
     const supported = !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setState((prev) => ({ ...prev, isSupported: supported }));
   }, []);
 

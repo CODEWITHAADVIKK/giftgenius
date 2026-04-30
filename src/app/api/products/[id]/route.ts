@@ -5,10 +5,10 @@ import { getProduct as getStaticProduct } from "@/lib/data";
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     
     // Attempt MongoDB fetch first
     try {
