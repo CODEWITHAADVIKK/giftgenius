@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { IoSearchOutline, IoEllipseOutline, IoStar, IoCartOutline, IoEyeOutline, IoHeartOutline, IoCloseOutline, IoChevronDownOutline } from "react-icons/io5";
-import { products } from "@/lib/data";
+import { useProducts, ApiProduct } from "@/lib/useProducts";
 import { formatINR } from "@/lib/utils";
 import { useCart } from "@/context/CartContext";
 import { useToast } from "@/context/ToastContext";
@@ -56,34 +56,13 @@ function ProductsContent() {
     if (q) setQuery(q);
   }, [searchParams]);
 
-  const filtered = useMemo(() => {
-    let results = [...products];
-
-    if (query) {
-      const q = query.toLowerCase();
-      results = results.filter(
-        (p) =>
-          p.name.toLowerCase().includes(q) ||
-          p.category.toLowerCase().includes(q) ||
-          p.tags.some((t) => t.includes(q))
-      );
-    }
-
-    if (category !== "all") {
-      results = results.filter((p) => p.categorySlug === category);
-    }
-
-    if (arOnly) {
-      results = results.filter((p) => p.ar);
-    }
-
-    if (sort === "price_asc") results.sort((a, b) => a.price - b.price);
-    else if (sort === "price_desc") results.sort((a, b) => b.price - a.price);
-    else if (sort === "rating") results.sort((a, b) => b.rating - a.rating);
-    else results.sort((a, b) => b.reviews - a.reviews);
-
-    return results;
-  }, [query, category, sort, arOnly]);
+  // Fetch from backend using custom hook! The backend handles filtering & sorting.
+  const { products: filtered, loading, error } = useProducts({
+    query,
+    category,
+    sort,
+    ar: arOnly,
+  });
 
   return (
     <>
@@ -99,7 +78,7 @@ function ProductsContent() {
             Our Collection
           </h1>
           <p className="text-sm text-white/50 font-[var(--font-body)]">
-            {filtered.length} products curated by AI for every occasion
+            {loading ? "Loading products..." : `${filtered.length} products curated by AI for every occasion`}
           </p>
         </motion.div>
 
@@ -187,7 +166,15 @@ function ProductsContent() {
         </div>
 
         {/* Product Grid */}
-        {filtered.length === 0 ? (
+        {loading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="w-8 h-8 border-4 border-[#7C3AED]/30 border-t-[#7C3AED] rounded-full animate-spin"></div>
+          </div>
+        ) : error ? (
+          <div className="text-center py-20 text-red-400">
+            Failed to load products: {error}
+          </div>
+        ) : filtered.length === 0 ? (
           <div className="text-center py-20">
             <p className="text-white/40 text-sm font-[var(--font-body)]">
               No products found. Try adjusting your filters.
@@ -238,7 +225,7 @@ function ProductsContent() {
                       <IoStar
                         key={s}
                         className={`w-3 h-3 ${
-                          s <= Math.floor(product.rating)
+                          s <= Math.floor(product.rating || 5)
                             ? "text-gold fill-gold"
                             : "text-white/20"
                         }`}
@@ -285,7 +272,7 @@ function ProductsContent() {
   );
 }
 
-function WishlistButton({ product }: { product: typeof products[number] }) {
+function WishlistButton({ product }: { product: ApiProduct }) {
   const { toggleItem, isWishlisted } = useWishlist();
   const { addToast } = useToast();
   const wishlisted = isWishlisted(product.id);
